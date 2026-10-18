@@ -41,6 +41,8 @@ Each gate has one home.
 | Preview record | `proposed_actions` — payload hash, target versions, 10-minute expiry |
 | The only campaign write | Postgres `apply_campaign_action` when `DATA_BACKEND=supabase`. Local mirror: `src/features/campaigns/services/apply-campaign-action.ts` |
 | Rate limit | `src/lib/rate-limit.ts` — Upstash when configured, memory counter otherwise. 20 parses per user per hour |
+| Browser headers | `src/lib/security/headers.ts` — content policy, no framing, nosniff. HTTPS-only on the live site |
+| Email link address | `src/lib/security/app-origin.ts` — confirmation links stay on the live site or the local desk |
 | Errors | `src/lib/errors/log-error.ts` |
 | Plain chat text | Copilot components render strings as text. No HTML from the model |
 

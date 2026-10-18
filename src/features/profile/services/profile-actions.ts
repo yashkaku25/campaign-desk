@@ -24,6 +24,7 @@ import { withLocalState } from "@/lib/data/local-store";
 import { env } from "@/lib/env";
 import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
+import { trustedAppOrigin } from "@/lib/security/app-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type ProfileNotice = { ok: false; message: string } | { ok: true; message: string };
@@ -147,7 +148,7 @@ export async function changeEmail(nextEmail: string, currentPassword: string): P
     }
 
     const supabase = await createSupabaseServerClient();
-    const origin = (await headers()).get("origin") ?? "http://localhost:3000";
+    const origin = trustedAppOrigin((await headers()).get("origin"), env.isProduction);
     const { error } = await supabase.auth.updateUser(
       { email: gmail.email },
       { emailRedirectTo: `${origin}/settings` },

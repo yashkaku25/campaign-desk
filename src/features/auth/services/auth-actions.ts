@@ -15,6 +15,7 @@ import { env } from "@/lib/env";
 import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
 import { takeAuthAttempt } from "@/lib/rate-limit";
+import { trustedAppOrigin } from "@/lib/security/app-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type AuthNotice = { ok: false; message: string } | { ok: true; message: string };
@@ -87,7 +88,7 @@ export async function signUp(
 
     const supabase = await createSupabaseServerClient();
     const headerList = await headers();
-    const origin = headerList.get("origin") ?? "http://localhost:3000";
+    const origin = trustedAppOrigin(headerList.get("origin"), env.isProduction);
     const { data, error } = await supabase.auth.signUp({
       email: input.email,
       password: input.password,

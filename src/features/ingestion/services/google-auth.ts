@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { getCurrentUser } from "@/features/auth/services/require-user";
 import { loadGoogleRefresh } from "@/features/ingestion/services/google-refresh-store";
 import { env } from "@/lib/env";
+import { sameSecret } from "@/lib/security/compare-secret";
 import { logError } from "@/lib/errors/log-error";
 
 const STATE_COOKIE = "campaign_desk_google_state";
@@ -63,7 +64,7 @@ export async function takeGoogleState(state: string | null): Promise<boolean> {
   const jar = await cookies();
   const expected = jar.get(STATE_COOKIE)?.value ?? "";
   jar.set(STATE_COOKIE, "", { httpOnly: true, sameSite: "lax", secure: env.isProduction, path: "/", maxAge: 0 });
-  return Boolean(state) && state === expected;
+  return sameSecret(state ?? "", expected);
 }
 
 export async function readGoogleRefreshToken(): Promise<string | null> {

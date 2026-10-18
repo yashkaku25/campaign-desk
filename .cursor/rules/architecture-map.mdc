@@ -1,0 +1,15 @@
+---
+description: Folder map and the single write path for the AdTech dashboard
+alwaysApply: true
+---
+
+# Architecture map
+
+`docs/ARCHITECTURE.md` is the map of this repo. Read it before adding a feature.
+
+- UI lives in `src/app/`, `src/components/`, or `src/features/*/components`. It does not import Supabase or call Gemini.
+- Database work lives in `src/features/*/services` or `src/lib/supabase/`.
+- Gemini calls, prompts, and JSON parsing live in `src/lib/ai/`.
+- New campaign writes go through `apply_campaign_action`. If a check changes, update the SQL function and `src/features/campaigns/services/apply-campaign-action.ts` together.
+- `DATA_BACKEND=local` is the offline store in `data/local-store.json`. `DATA_BACKEND=supabase` is production. Do not add a third store.
+- One screen action has one server action. Do not add an API route that repeats the same write.

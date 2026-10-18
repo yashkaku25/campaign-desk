@@ -1,0 +1,38 @@
+{
+  "name": "adtech-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@google/genai": "^1.22.0",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.75.0",
+    "@upstash/ratelimit": "^2.0.6",
+    "@upstash/redis": "^1.35.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^2.15.4",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.18.6",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

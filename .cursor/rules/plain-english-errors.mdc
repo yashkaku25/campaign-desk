@@ -1,0 +1,43 @@
+---
+description: Plain-English logs and errors with file path, root cause, and connected files
+alwaysApply: true
+---
+
+# Plain-English errors and logs
+
+Yash is a designer, not a coder. Every log, thrown error, and on-screen message must use everyday words a 5th grader can follow. Say what broke, why, and where. A status code alone is not an explanation.
+
+Each error includes:
+
+1. **What** the person was trying to do
+2. **Why** it failed, in words (keep the status code for the machine, and say what it means)
+3. **File** that failed, full path
+4. **Connected to** other files or services in the chain, when the failure crosses a boundary
+5. **Fix** — one next step
+
+On screen, stay short. Put the file path and connections in the log, not in a stack trace on the page.
+
+```ts
+// ❌ BAD — code only, no place, no cause
+return NextResponse.json({ error: "404" }, { status: 404 });
+catch (e) { console.error(e); }
+
+// ✅ GOOD
+return NextResponse.json({
+  error: "Page not found. No screen in the app uses this address.",
+  file: "src/app/campaigns/[id]/page.tsx",
+  connectedTo: "src/services/campaigns.ts looks up the campaign in Supabase",
+  fix: "Check the campaign link, or open Campaigns from the sidebar.",
+}, { status: 404 });
+
+logError({
+  what: "Could not pause the campaign.",
+  why: "Supabase has no campaign with this id, so nothing was changed.",
+  file: "src/features/campaigns/services/pause-campaign.ts",
+  connectedTo: "src/lib/ai/parse-command.ts sent this action from the copilot.",
+  fix: "Open the preview card and confirm the campaign still exists.",
+  cause: error,
+});
+```
+
+Map codes in words: 404 page not found, 401 not signed in, 403 not allowed, 409 already done, 429 too many tries, 500 something inside the app broke.

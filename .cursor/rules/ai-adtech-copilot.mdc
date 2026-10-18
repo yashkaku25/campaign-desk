@@ -1,0 +1,60 @@
+---
+description: AI AdTech Copilot architecture, Gemini integration, and TypeScript standards
+alwaysApply: true
+---
+
+# AI AdTech Copilot
+
+Pragmatic modular monolith under `src/`. No premature microservices.
+
+## Separation of concerns
+
+- UI (`src/components/` or `src/features/*/components`): presentation and interaction only.
+- Data (`src/services/` or `src/features/*/services`): Supabase queries and mutations.
+- AI (`src/lib/ai/`): Gemini calls, prompt formatting, and JSON parsing.
+
+```tsx
+// ❌ BAD — query inside a component
+const { data } = await supabase.from("campaigns").select("*");
+
+// ✅ GOOD — component calls a service
+const campaigns = await listCampaigns();
+```
+
+## Gemini
+
+- Official Google AI SDK only. Key lives in `GEMINI_API_KEY`. Never hardcode it.
+- Natural-language commands that become database actions must parse against a strict JSON schema.
+- Keep system instructions short and in prompt modules, not inline in UI.
+
+```ts
+// ✅ GOOD
+const apiKey = process.env.GEMINI_API_KEY;
+const action = CampaignActionSchema.parse(JSON.parse(raw));
+```
+
+## Typing and safety
+
+- No `any`. Define interfaces for campaigns, logs, chat payloads, and API responses.
+- Chat-triggered mutations must be idempotent (stable keys or upserts; no duplicate rows on retry).
+- Wrap Supabase, Gemini, and other async work in `try/catch` and log through one error helper.
+
+```ts
+// ❌ BAD
+catch (e) {}
+
+// ✅ GOOD — plain words, file, and cause (see plain-english-errors)
+catch (error) {
+  logError({
+    what: "Could not create the campaign.",
+    why: "Supabase rejected the save.",
+    file: "src/features/campaigns/services/create-campaign.ts",
+    cause: error,
+  });
+  throw new CampaignMutationError("Could not create the campaign.", { cause: error });
+}
+```
+
+## Layout
+
+Group by feature under `src/features/<domain>/` (`components`, `services`, hooks) when a domain has more than one file.

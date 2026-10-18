@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.vercel
+*.tsbuildinfo
+data/google-refresh.json
+data/local-store.json
+data/local-accounts.json
+data/avatars
+.env
+.env.local
+.DS_Store

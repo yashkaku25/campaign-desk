@@ -18,12 +18,14 @@ export function SheetLink({
   ready,
   startUrl,
   initialNotice,
+  canSync = true,
 }: {
   url: string;
   connected: boolean;
   ready: boolean;
   startUrl: string;
   initialNotice?: { ok: boolean; message: string };
+  canSync?: boolean;
 }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -53,6 +55,19 @@ export function SheetLink({
     setNotice(result);
     if (result.openChat) window.dispatchEvent(new Event("desk-open"));
     if (result.ok) router.refresh();
+  }
+
+  if (!canSync) {
+    return (
+      <div className="space-y-2">
+        {url ? (
+          <a href={url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-ink underline-offset-4 hover:underline">
+            Open sheet
+          </a>
+        ) : null}
+        <p className="text-sm text-muted">An admin has not allowed you to change the sheet.</p>
+      </div>
+    );
   }
 
   return (

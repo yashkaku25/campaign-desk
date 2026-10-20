@@ -15,6 +15,7 @@ import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
 import { payloadHash } from "@/lib/hash";
 import { allowParse } from "@/lib/rate-limit";
+import { deny } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { approveAction } from "@/features/copilot/services/approve-action";
 import { rejectAction } from "@/features/copilot/services/reject-action";
@@ -23,9 +24,13 @@ import { planMutation } from "@/features/campaigns/services/plan-action";
 import { getQuote } from "@/features/currency/services/currency-actions";
 import { formatQuote } from "@/lib/currency/convert";
 import { summarizeAll } from "@/features/campaigns/services/summarize";
+import { listSheetCreativeHints } from "@/features/practice/services/sheet-creative-hints";
 
 export async function proposeAction(text: string): Promise<{ ok: boolean; message: string; decided?: boolean }> {
   const user = await requireUser();
+  if (deny(user, "ask") && deny(user, "propose")) {
+    return { ok: false, message: "An admin has not allowed you to use chat." };
+  }
   const decision = parseDecision(text);
   if (decision) return applySpokenDecision(user.id, text.trim(), decision);
 
@@ -33,17 +38,37 @@ export async function proposeAction(text: string): Promise<{ ok: boolean; messag
     return { ok: false, message: "Too many tries. Wait an hour and send that again." };
   }
 
+  let summaries: CampaignSummary[];
+  try {
+    const snapshot = await readWorkspace(user.id);
+    summaries = summarizeAll(
+      snapshot.campaigns.filter((campaign) => campaign.workspaceId === user.workspaceId),
+      snapshot.metrics,
+    );
+  } catch (error) {
+    return fail(error, "src/lib/data/workspace-store.ts");
+  }
+
+  let sheetHints: Awaited<ReturnType<typeof listSheetCreativeHints>> = [];
+  try {
+    sheetHints = await listSheetCreativeHints();
+  } catch {
+    sheetHints = [];
+  }
+  const metricContext = buildMetricContext(summaries, sheetHints);
   let actions: CampaignAction[];
   try {
-    actions = await parseCommand(text);
+    actions = await parseCommand(text, metricContext, summaries, sheetHints);
   } catch (error) {
     return fail(error, "src/lib/ai/parse-command.ts");
   }
 
+  const asksOnly = actions.every((action) => action.type === "answer");
+  const blocked = asksOnly ? deny(user, "ask") : deny(user, "propose");
+  if (blocked) return { ok: false, message: blocked };
+
   const preparedAnswers = new Map<number, string>();
   try {
-    const snapshot = await readWorkspace(user.id);
-    const summaries = summarizeAll(snapshot.campaigns, snapshot.metrics);
     for (let index = 0; index < actions.length; index += 1) {
       const action = actions[index];
       if (action?.type === "answer") {
@@ -141,8 +166,11 @@ function buildDraft(
 }
 
 async function answerQuestion(question: string, summaries: CampaignSummary[]): Promise<string> {
+  const trimmed = question.trim();
+  // Gemini sometimes returns the full marketer brief already in message.
+  if (trimmed.length > 80 && !trimmed.endsWith("?")) return trimmed;
   if (!env.geminiApiKey) return offlineAnswer(summaries);
-  return askGeminiForAnswer(question, buildMetricContext(summaries));
+  return askGeminiForAnswer(trimmed, buildMetricContext(summaries));
 }
 
 function fail(error: unknown, connectedTo: string): { ok: false; message: string } {

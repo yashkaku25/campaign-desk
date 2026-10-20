@@ -1,0 +1,23 @@
+---
+description: Test changes, check bugs and security, then save on GitHub and update the live Vercel site
+alwaysApply: true
+---
+
+# Test before the live site
+
+A change is not finished when the file is saved. Finish the check, then update GitHub and the live Vercel site together.
+
+1. **Try the path a person uses.** Click, type, and submit on the screen that changed. A passing unit test is not enough for a screen change.
+2. **Look for bugs** on that path and on the other screens that share the same data. Empty, error, and signed-out states count.
+3. **Look for security mistakes** before anything is shared:
+   - Secrets stay in `src/lib/env.ts`. Never put a key in a client component or a `NEXT_PUBLIC_` variable.
+   - Campaign writes go through `apply_campaign_action` only.
+   - Chat and campaign names stay plain text. No `dangerouslySetInnerHTML`.
+   - Do not commit `.env`, `.env.local`, or `data/google-refresh.json`.
+4. **Stop if a check fails.** Fix it and run the check again. Do not commit, and do not deploy, while a check is still failing.
+5. **When the check passes,** commit the change on GitHub and let the production Vercel site build from that commit. The live address is `https://campaign-desk-khaki.vercel.app`. Ignore preview links that contain `-git-`.
+
+```txt
+❌ BAD — save the file, commit, and deploy before opening the screen
+✅ GOOD — open the screen, confirm the action works, scan the security list, then commit and deploy
+```

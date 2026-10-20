@@ -83,6 +83,12 @@ export function createDemoState(): AppState {
         email: "yash@studio.test",
         currency: "USD",
         avatarUrl: null,
+        role: "admin",
+        canAsk: true,
+        canPropose: true,
+        canApprove: true,
+        canSync: true,
+        approveCapCents: 10_000_000,
       },
     ],
     campaigns,
@@ -98,6 +104,7 @@ export function createDemoState(): AppState {
     messages: [],
     actions: [],
     audit: [],
+    invites: [],
   };
 }
 

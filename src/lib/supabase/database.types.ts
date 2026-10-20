@@ -3,6 +3,24 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      workspace_invites: {
+        Row: {
+          id: string;
+          workspace_id: string;
+          email: string;
+          invited_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          workspace_id: string;
+          email: string;
+          invited_by?: string | null;
+          created_at?: string;
+        };
+        Update: { email?: string };
+        Relationships: [];
+      };
       workspaces: {
         Row: { id: string; name: string; created_at: string; sheet_url: string | null };
         Insert: { id?: string; name: string; created_at?: string; sheet_url?: string | null };
@@ -17,6 +35,12 @@ export interface Database {
           email: string;
           currency: "USD" | "EUR" | "GBP" | "CAD" | "INR";
           avatar_path: string | null;
+          role?: "admin" | "team";
+          can_ask?: boolean;
+          can_propose?: boolean;
+          can_approve?: boolean;
+          can_sync?: boolean;
+          approve_cap_cents?: number;
           created_at: string;
         };
         Insert: {
@@ -32,6 +56,12 @@ export interface Database {
           display_name?: string;
           currency?: "USD" | "EUR" | "GBP" | "CAD" | "INR";
           avatar_path?: string | null;
+          role?: "admin" | "team";
+          can_ask?: boolean;
+          can_propose?: boolean;
+          can_approve?: boolean;
+          can_sync?: boolean;
+          approve_cap_cents?: number;
         };
         Relationships: [];
       };
@@ -188,6 +218,10 @@ export interface Database {
       };
       delete_own_account: {
         Args: Record<string, never>;
+        Returns: undefined;
+      };
+      remove_team_member: {
+        Args: { target: string };
         Returns: undefined;
       };
       set_workspace_sheet: {

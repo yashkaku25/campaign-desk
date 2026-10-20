@@ -1,27 +1,22 @@
 import type { Metadata } from "next";
-import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { Figtree } from "next/font/google";
 
 import "./globals.css";
 
-const source = Source_Sans_3({
+const figtree = Figtree({
   subsets: ["latin"],
-  variable: "--font-source",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-figtree",
 });
 
 export const metadata: Metadata = {
   title: "Campaign desk",
-  description: "Watch campaign results and approve changes from chat.",
+  description: "See how the ad might land before it spends. Sync your sheet. Approve every real change.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${source.variable} ${fraunces.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={figtree.variable} suppressHydrationWarning>
+      <body className="antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>

@@ -6,12 +6,15 @@ import { callApplyRpc, runTransaction } from "@/lib/data/workspace-store";
 import { env } from "@/lib/env";
 import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
+import { deny } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { applyCampaignAction } from "@/features/campaigns/services/apply-campaign-action";
 import { writeApprovedChangeToSheet } from "@/features/ingestion/services/sync-sheet";
 
 export async function approveAction(actionId: string): Promise<{ ok: boolean; message: string }> {
   const user = await requireUser();
+  const blocked = deny(user, "approve");
+  if (blocked) return { ok: false, message: blocked };
   try {
     const result =
       env.dataBackend === "supabase"

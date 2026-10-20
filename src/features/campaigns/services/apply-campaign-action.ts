@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
 
+import { deny } from "@/features/auth/services/access";
+import { explainCap, MAX_DAILY_BUDGET_CENTS, MIN_DAILY_BUDGET_CENTS } from "@/features/campaigns/services/caps";
 import type { AppState, AuditEntry, Campaign, CampaignStatus, ProposedAction } from "@/lib/domain";
 import { payloadHash } from "@/lib/hash";
-import { explainCap, MAX_DAILY_BUDGET_CENTS, MIN_DAILY_BUDGET_CENTS } from "@/features/campaigns/services/caps";
 
 const STATUSES = new Set<CampaignStatus>(["draft", "active", "paused", "ended"]);
 
@@ -30,6 +31,9 @@ export function applyCampaignAction(state: AppState, input: ApplyInput): ApplyRe
   if (!isMember(state, input.userId, action.workspaceId) || action.userId !== input.userId) {
     return { state, ok: false, message: "You can only approve your own preview." };
   }
+  const actor = state.profiles.find((profile) => profile.id === input.userId);
+  const blocked = actor ? deny(actor, "approve", actionBudget(action)) : "An admin has not allowed you to approve changes.";
+  if (blocked) return { state, ok: false, message: blocked };
   if (action.status === "approved") {
     return {
       state,
@@ -193,6 +197,14 @@ function finish(
     ),
     audit: [audit, ...state.audit],
   };
+}
+
+function actionBudget(action: ProposedAction): number {
+  return Math.max(
+    action.create?.dailyBudgetCents ?? 0,
+    ...action.targets.map((target) => target.afterBudgetCents),
+    0,
+  );
 }
 
 function isMember(state: AppState, userId: string, workspaceId: string): boolean {

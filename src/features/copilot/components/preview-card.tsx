@@ -15,6 +15,8 @@ export function PreviewCard({ preview }: { preview: PreviewModel }) {
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState<"approve" | "reject" | null>(null);
   const [notice, setNotice] = useState<{ ok: boolean; message: string } | null>(null);
+  const stillOpen =
+    preview.status === "pending" && new Date(preview.expiresAt).getTime() > Date.now();
 
   function run(kind: "approve" | "reject") {
     setBusy(kind);
@@ -44,12 +46,20 @@ export function PreviewCard({ preview }: { preview: PreviewModel }) {
           </li>
         ))}
       </ul>
-      <p className="mt-3 text-xs text-muted">{preview.canApprove ? pendingCopy(preview.expiresAt) : decidedCopy(preview.status)}</p>
-      {preview.canApprove ? (
+      <p className="mt-3 text-xs text-muted">
+        {preview.canApprove
+          ? pendingCopy(preview.expiresAt)
+          : stillOpen
+            ? "An admin has not allowed you to approve changes. You can still Reject."
+            : decidedCopy(preview.status)}
+      </p>
+      {stillOpen ? (
         <div className="mt-3 flex flex-wrap gap-2">
-          <Button type="button" disabled={pending} aria-busy={busy === "approve"} onClick={() => run("approve")}>
-            {busy === "approve" ? <BusyLabel>Saving the change.</BusyLabel> : "Approve"}
-          </Button>
+          {preview.canApprove ? (
+            <Button type="button" disabled={pending} aria-busy={busy === "approve"} onClick={() => run("approve")}>
+              {busy === "approve" ? <BusyLabel>Saving the change.</BusyLabel> : "Approve"}
+            </Button>
+          ) : null}
           <Button type="button" variant="outline" disabled={pending} aria-busy={busy === "reject"} onClick={() => run("reject")}>
             {busy === "reject" ? <BusyLabel>Leaving it unchanged.</BusyLabel> : "Reject"}
           </Button>

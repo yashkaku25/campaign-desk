@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { deny } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { PREVIEW_TTL_MS } from "@/features/campaigns/services/caps";
 import { readConnectedSheet, writeSheetCells, writeTemplateHeaders } from "@/features/ingestion/services/google-sheets";
@@ -21,6 +22,8 @@ import { loadRateTable } from "@/lib/currency/rates";
 
 export async function syncSheet(): Promise<{ ok: boolean; message: string; openChat?: boolean }> {
   const user = await requireUser();
+  const blocked = deny(user, "sync");
+  if (blocked) return { ok: false, message: blocked };
   const state = await readWorkspace(user.id);
   const access = await googleAccessToken();
   const token = "token" in access ? access.token : null;
@@ -41,6 +44,9 @@ export async function syncSheet(): Promise<{ ok: boolean; message: string; openC
 }
 
 export async function importCsv(text: string): Promise<{ ok: boolean; message: string; openChat?: boolean }> {
+  const user = await requireUser();
+  const blocked = deny(user, "sync");
+  if (blocked) return { ok: false, message: blocked };
   if (text.length > 400_000) return { ok: false, message: "That file is too big. Keep it to a few hundred rows." };
   return importSheetValues(parseCsv(text), "file");
 }
@@ -55,7 +61,9 @@ export async function importScreenshot(
 export async function importPictures(
   images: { base64: string; mimeType: string }[],
 ): Promise<{ ok: boolean; message: string; openChat?: boolean }> {
-  await requireUser();
+  const user = await requireUser();
+  const blocked = deny(user, "sync");
+  if (blocked) return { ok: false, message: blocked };
   if (images.length === 0) return { ok: false, message: "Add a picture first." };
   if (images.length > 8) return { ok: false, message: "8 pictures is the most at one time." };
   const total = images.reduce((sum, image) => sum + image.base64.length, 0);

@@ -20,12 +20,28 @@ export function planMutation(
     if (cap) return { ok: false, reason: cap };
     const name = action.name.trim();
     if (!name) return { ok: false, reason: "A new campaign needs a name." };
+    const strategyNote = action.strategyNote?.trim() || null;
+    const expectedOutcome = action.expectedOutcome?.trim() || null;
+    const extras = [
+      strategyNote ? `Strategy: ${strategyNote}` : null,
+      expectedOutcome ? `Expect: ${expectedOutcome}` : null,
+    ]
+      .filter(Boolean)
+      .join(" ");
     return {
       ok: true,
       plan: {
         targets: [],
-        create: { name, dailyBudgetCents: action.dailyBudgetCents, status: "active" },
-        summary: `Create ${name} with a daily budget of ${money(action.dailyBudgetCents)}.`,
+        create: {
+          name,
+          dailyBudgetCents: action.dailyBudgetCents,
+          status: "active",
+          strategyNote,
+          expectedOutcome,
+        },
+        summary: extras
+          ? `Create ${name} with a daily budget of ${money(action.dailyBudgetCents)}. ${extras}`
+          : `Create ${name} with a daily budget of ${money(action.dailyBudgetCents)}.`,
       },
     };
   }

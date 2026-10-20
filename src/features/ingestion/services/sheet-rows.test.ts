@@ -22,6 +22,14 @@ describe("parseSheetValues", () => {
     });
   });
 
+  it("reads Budget / day as the daily budget", () => {
+    const parsed = parseSheetValues([
+      ["campaign_name", "Budget / day"],
+      ["Spring Launch", "120.00"],
+    ]);
+    expect(parsed.rows[0]?.dailyBudgetCents).toBe(12000);
+  });
+
   it("refuses a sheet with no campaign name column", () => {
     expect(parseSheetValues([["status"], ["active"]]).problem).toMatch(/campaign_name/);
   });

@@ -3,10 +3,12 @@ import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { healLocalState } from "@/lib/data/heal-local-state";
 import type { AppState } from "@/lib/domain";
 import { createDemoState } from "@/lib/data/seed";
 import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
+import { env } from "@/lib/env";
 
 const filePath = path.join(process.cwd(), "data", "local-store.json");
 
@@ -35,10 +37,19 @@ export async function readLocalState(): Promise<AppState> {
     if (!parsed.workspace || !Array.isArray(parsed.campaigns) || !Array.isArray(parsed.actions)) {
       throw new Error("missing-tables");
     }
-    return {
-      ...parsed,
-      workspace: { ...parsed.workspace, sheetUrl: parsed.workspace.sheetUrl ?? null },
-    };
+    const healed = healLocalState(
+      {
+        ...parsed,
+        workspace: { ...parsed.workspace, sheetUrl: parsed.workspace.sheetUrl ?? null },
+        invites: parsed.invites ?? [],
+        profiles: Array.isArray(parsed.profiles) ? parsed.profiles : [],
+      },
+      env.demoEmail,
+    );
+    if (healed.dirty) {
+      await writeLocalState(healed.state);
+    }
+    return healed.state;
   } catch (error) {
     const missing = error instanceof Error && "code" in error && error.code === "ENOENT";
     if (missing) {

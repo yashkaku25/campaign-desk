@@ -2,6 +2,7 @@
 
 import { approveAction } from "@/features/copilot/services/approve-action";
 import { PREVIEW_TTL_MS } from "@/features/campaigns/services/caps";
+import { deny } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { readWorkspace, runTransaction } from "@/lib/data/workspace-store";
 import { newRecordId } from "@/lib/data/seed";
@@ -30,6 +31,8 @@ export async function setCampaignStatus(
     if (campaign.status === next) {
       return { ok: true, message: next === "paused" ? "Already paused." : "Already active." };
     }
+    const blocked = deny(user, "approve", campaign.dailyBudgetCents);
+    if (blocked) return { ok: false, message: blocked };
 
     const kind = next === "paused" ? "pause" : "resume";
     const targets = [

@@ -9,7 +9,7 @@ export default function DashboardError({
 }) {
   return (
     <div className="max-w-lg rounded-3xl border border-line bg-card px-6 py-10">
-      <h1 className="font-serif text-3xl">This screen could not load.</h1>
+      <h1 className="font-sans font-semibold tracking-tight text-3xl">This screen could not load.</h1>
       <p className="mt-3 text-sm text-muted">{error.message}</p>
       <button
         type="button"

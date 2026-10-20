@@ -67,7 +67,7 @@ export function PerformanceBoard({
                 <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: cardTone.bar }} />
                 {card.label}
               </span>
-              <span className="mt-2 block font-serif text-2xl leading-none tracking-tight tabular-nums">{card.value}</span>
+              <span className="mt-2 block font-sans font-semibold tracking-tight text-2xl leading-none tracking-tight tabular-nums">{card.value}</span>
               <span className="mt-2 block text-xs font-semibold" style={{ color: deltaColor(card.key, card.delta.direction) }}>
                 {card.delta.text}
               </span>
@@ -76,7 +76,7 @@ export function PerformanceBoard({
         })}
       </div>
       <div className="rounded-2xl border bg-card p-5" style={{ borderColor: tone.ink }}>
-        <h2 className="mb-3 font-serif text-2xl tracking-tight" style={{ color: tone.ink }}>
+        <h2 className="mb-3 font-sans font-semibold tracking-tight text-2xl tracking-tight" style={{ color: tone.ink }}>
           {selected?.label ?? "Spend"}
         </h2>
         <SpendChart points={points} metric={current} symbol={symbol} unitsPerUsd={unitsPerUsd} />

@@ -29,8 +29,8 @@ export function SettingsForm({
   avatarUrl: string | null;
 }) {
   return (
-    <div className="max-w-xl space-y-6">
-      <h1 className="font-serif text-4xl tracking-tight">Settings</h1>
+    <div className="space-y-6">
+      <h1 className="font-sans font-semibold tracking-tight text-4xl tracking-tight">Settings</h1>
       <ProfileCard name={name} email={email} currency={currency} avatarUrl={avatarUrl} />
       <EmailCard />
       <PasswordCard />
@@ -57,7 +57,7 @@ function ProfileCard({
 
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-card p-6">
-      <h2 className="font-serif text-2xl">Name, photo, and currency</h2>
+      <h2 className="font-sans font-semibold tracking-tight text-2xl">Name, photo, and currency</h2>
       <div className="flex items-center gap-4">
         {avatarUrl ? (
           // The photo is a file the person uploaded, not model HTML.
@@ -134,7 +134,7 @@ function EmailCard() {
   const [pending, startTransition] = useTransition();
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-card p-6">
-      <h2 className="font-serif text-2xl">Email</h2>
+      <h2 className="font-sans font-semibold tracking-tight text-2xl">Email</h2>
       <form
         className="space-y-3"
         onSubmit={(event) => {
@@ -163,7 +163,7 @@ function PasswordCard() {
   const [pending, startTransition] = useTransition();
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-card p-6">
-      <h2 className="font-serif text-2xl">Password</h2>
+      <h2 className="font-sans font-semibold tracking-tight text-2xl">Password</h2>
       <form
         className="space-y-3"
         onSubmit={(event) => {
@@ -190,7 +190,7 @@ function DeleteCard({ email }: { email: string }) {
   const [pending, startTransition] = useTransition();
   return (
     <section className="space-y-4 rounded-2xl border border-clay/40 bg-card p-6">
-      <h2 className="font-serif text-2xl">Delete account</h2>
+      <h2 className="font-sans font-semibold tracking-tight text-2xl">Delete account</h2>
       <form
         className="space-y-3"
         onSubmit={(event) => {

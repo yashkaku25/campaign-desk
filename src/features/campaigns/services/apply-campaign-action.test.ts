@@ -136,4 +136,19 @@ describe("applyCampaignAction", () => {
     expect(result.state.campaigns.find((campaign) => campaign.id === CAMPAIGN_IDS.retarget)?.version).toBe(1);
     expect(result.state.campaigns.find((campaign) => campaign.id === CAMPAIGN_IDS.prospect)?.version).toBe(1);
   });
+
+  it("refuses a team member who is not allowed to approve", () => {
+    const state = withAction([target()]);
+    state.profiles = state.profiles.map((profile) =>
+      profile.id === DEMO_USER_ID ? { ...profile, role: "team", canApprove: false } : profile,
+    );
+    const result = applyCampaignAction(state, {
+      userId: DEMO_USER_ID,
+      actionId: "55555555-5555-4555-8555-555555555555",
+      now: NOW,
+    });
+    expect(result.ok).toBe(false);
+    expect(result.message).toMatch(/not allowed you to approve/);
+    expect(result.state.campaigns.find((campaign) => campaign.id === CAMPAIGN_IDS.retarget)?.status).toBe("active");
+  });
 });

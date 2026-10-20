@@ -2,6 +2,7 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 
+import { accessOf } from "@/features/auth/services/access";
 import { avatarUrlFromPath } from "@/features/profile/services/avatar-url";
 import { isCurrency } from "@/lib/currency/codes";
 import type { Profile } from "@/lib/domain";
@@ -29,19 +30,28 @@ export async function getCurrentUser(): Promise<Profile | null> {
   if (error || !data.user) return null;
   const profile = await supabase.from("profiles").select("*").eq("id", data.user.id).maybeSingle();
   if (!profile.data) return null;
+  const row = profile.data;
   return normalizeProfile({
-    id: profile.data.id,
-    workspaceId: profile.data.workspace_id,
-    displayName: profile.data.display_name,
-    email: profile.data.email,
-    currency: profile.data.currency,
-    avatarUrl: avatarUrlFromPath(profile.data.avatar_path),
+    id: row.id,
+    workspaceId: row.workspace_id,
+    displayName: row.display_name,
+    email: row.email,
+    currency: row.currency,
+    avatarUrl: avatarUrlFromPath(row.avatar_path),
+    ...accessOf({
+      role: row.role,
+      canAsk: row.can_ask,
+      canPropose: row.can_propose,
+      canApprove: row.can_approve,
+      canSync: row.can_sync,
+      approveCapCents: row.approve_cap_cents,
+    }),
   });
 }
 
 function normalizeProfile(profile: Profile): Profile {
   const currency = isCurrency(String(profile.currency)) ? profile.currency : "USD";
-  return { ...profile, currency, avatarUrl: profile.avatarUrl ?? null };
+  return { ...profile, ...accessOf(profile), currency, avatarUrl: profile.avatarUrl ?? null };
 }
 
 export async function requireUser(): Promise<Profile> {

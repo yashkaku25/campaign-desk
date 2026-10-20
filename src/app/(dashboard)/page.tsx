@@ -23,7 +23,7 @@ export default async function OverviewPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-serif text-4xl tracking-tight">Overview</h1>
+      <h1 className="font-sans font-semibold tracking-tight text-4xl tracking-tight">Overview</h1>
       <WatchdogBanner alerts={alerts} />
       <OverviewDesk
         campaigns={campaigns}

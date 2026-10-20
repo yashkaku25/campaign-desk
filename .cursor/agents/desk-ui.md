@@ -14,7 +14,7 @@ When invoked:
 
 Screen jobs:
 - Overview answers how the whole desk is doing. Four numbers, the chart for the one you press, and the campaigns that make that number. The full table lives on Campaigns.
-- Campaigns is the list. Filters are All, Active, and Paused.
+- Campaigns is the list. Filters are All, Active, Paused, and Ended. Sort by clicking a column.
 - A campaign page is one campaign, with a way back to Campaigns. Copy stays off until the sheet has the offer, the audience, and the current line.
 - Chat opens on demand. A change is saved only after Approve.
 - Settings is the account. Email, password, and delete stay available, but the page should not shout the same fact twice.

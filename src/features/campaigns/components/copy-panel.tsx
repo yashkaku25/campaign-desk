@@ -15,7 +15,7 @@ export function CopyPanel({ campaignId }: { campaignId: string }) {
   return (
     <section className="space-y-3 rounded-2xl border border-line bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-serif text-2xl">Copy</h2>
+        <h2 className="font-sans font-semibold tracking-tight text-2xl">Copy</h2>
         <Button
           type="button"
           disabled={pending}

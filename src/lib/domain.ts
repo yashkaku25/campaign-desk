@@ -11,6 +11,8 @@ export const CAMPAIGN_IDS = {
   holiday: "33333333-3333-4333-8333-333333333306",
 } as const;
 
+export type DeskRole = "admin" | "team";
+
 export type CampaignStatus = "draft" | "active" | "paused" | "ended";
 
 export type ActionStatus = "pending" | "approved" | "rejected" | "expired" | "failed";
@@ -22,6 +24,18 @@ export interface Profile {
   email: string;
   currency: "USD" | "EUR" | "GBP" | "CAD" | "INR";
   avatarUrl: string | null;
+  role: DeskRole;
+  canAsk: boolean;
+  canPropose: boolean;
+  canApprove: boolean;
+  canSync: boolean;
+  approveCapCents: number;
+}
+
+export interface DeskInvite {
+  email: string;
+  invitedBy: string | null;
+  createdAt: string;
 }
 
 export interface Campaign {
@@ -83,6 +97,10 @@ export interface CreateSnapshot {
   name: string;
   dailyBudgetCents: number;
   status: "active";
+  /** Optional marketer strategy attached to the create preview. */
+  strategyNote?: string | null;
+  /** Optional expectation the marketer stated for this test. */
+  expectedOutcome?: string | null;
 }
 
 export interface ProposedAction {
@@ -120,6 +138,7 @@ export interface AppState {
   messages: ChatMessage[];
   actions: ProposedAction[];
   audit: AuditEntry[];
+  invites: DeskInvite[];
 }
 
 export interface PreviewLine {

@@ -16,11 +16,12 @@ import {
   passwordMatchesHash,
   saveLocalAccount,
 } from "@/features/auth/services/local-accounts";
+import { accessOf } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { passwordsMatch } from "@/features/auth/services/session-token";
 import { signupGmail } from "@/features/auth/services/gmail-address";
 import { isCurrency, type CurrencyCode } from "@/lib/currency/codes";
-import { withLocalState } from "@/lib/data/local-store";
+import { readLocalState, withLocalState } from "@/lib/data/local-store";
 import { env } from "@/lib/env";
 import { AppError } from "@/lib/errors/app-error";
 import { logError } from "@/lib/errors/log-error";
@@ -215,6 +216,11 @@ export async function deleteAccount(confirmEmail: string, currentPassword: strin
       return { ok: false, message: "The current password did not match." };
     }
     if (env.dataBackend === "local") {
+      const saved = await readLocalState();
+      const admins = saved.profiles.filter((profile) => accessOf(profile).role === "admin").length;
+      if (accessOf(user).role === "admin" && admins < 2) {
+        return { ok: false, message: "The desk needs one admin." };
+      }
       await withLocalState((state) => {
         const threadIds = new Set(state.threads.filter((thread) => thread.userId === user.id).map((thread) => thread.id));
         return {

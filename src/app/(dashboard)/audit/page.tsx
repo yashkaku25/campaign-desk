@@ -6,10 +6,10 @@ export default async function AuditPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-serif text-4xl tracking-tight">Audit</h1>
+      <h1 className="font-sans font-semibold tracking-tight text-4xl tracking-tight">Audit</h1>
       {entries.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-line bg-card px-6 py-12">
-          <p className="font-serif text-2xl">No changes yet</p>
+          <p className="font-sans font-semibold tracking-tight text-2xl">No changes yet</p>
           <p className="mt-2 text-sm text-muted">Approve or reject a preview and it will show up here.</p>
         </div>
       ) : (

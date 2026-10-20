@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { deny } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { googleAccessToken, googleConnectReady, googleConnectStartUrl, readGoogleRefreshToken } from "@/features/ingestion/services/google-auth";
 import { createCampaignSheet, readConnectedSheet, writeTemplateHeaders } from "@/features/ingestion/services/google-sheets";
@@ -27,7 +28,9 @@ export async function currentSheetConnection(): Promise<{ url: string; connected
 }
 
 export async function createDeskSheet(): Promise<{ ok: boolean; message: string }> {
-  await requireUser();
+  const user = await requireUser();
+  const blocked = deny(user, "sync");
+  if (blocked) return { ok: false, message: blocked };
   const access = await googleAccessToken();
   if ("problem" in access) return { ok: false, message: access.problem };
   const created = await createCampaignSheet(access.token);
@@ -39,7 +42,9 @@ export async function createDeskSheet(): Promise<{ ok: boolean; message: string 
 }
 
 export async function saveSheetUrl(raw: string): Promise<{ ok: boolean; message: string; openChat?: boolean }> {
-  await requireUser();
+  const user = await requireUser();
+  const blocked = deny(user, "sync");
+  if (blocked) return { ok: false, message: blocked };
   const trimmed = raw.trim();
   if (trimmed.length > 500) return { ok: false, message: "That sheet link is too long." };
   if (trimmed && !sheetIdFromUrl(trimmed)) return { ok: false, message: "Paste a Google Sheet link." };
@@ -82,8 +87,8 @@ async function storeSheetUrl(trimmed: string): Promise<{ ok: boolean; message: s
       what: "Could not save the Google Sheet link.",
       why: "Supabase rejected the sheet link.",
       file: "src/features/ingestion/services/connect-sheet.ts",
-      connectedTo: "public.set_workspace_sheet in supabase/migrations/0006_sheet_url.sql",
-      fix: "Apply supabase/migrations/0006_sheet_url.sql, then save the link again.",
+      connectedTo: "public.set_workspace_sheet in supabase/migrations/0008_sync_gates.sql",
+      fix: "Apply supabase/migrations/0007_roles.sql and 0008_sync_gates.sql, then save the link again.",
       cause: error,
     });
     return { ok: false, message: "Could not save the sheet link. The workspace is not ready for a sheet yet." };

@@ -3,20 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, LayoutDashboard, Megaphone, MessageCircle } from "lucide-react";
+import { ClipboardList, FlaskConical, LayoutDashboard, Megaphone, MessageCircle } from "lucide-react";
 
+import { BrandMark } from "@/components/brand/mark";
 import { signOut } from "@/features/auth/services/auth-actions";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
   { href: "/campaigns", label: "Campaigns", icon: Megaphone },
+  { href: "/simulation", label: "Simulation", icon: FlaskConical },
   { href: "/audit", label: "Audit", icon: ClipboardList },
 ];
 
 export function Sidebar({
   name,
   email,
+  roleLabel,
   avatarUrl,
   pendingChats = 0,
   chatOpen,
@@ -24,6 +27,7 @@ export function Sidebar({
 }: {
   name: string;
   email: string;
+  roleLabel: string;
   avatarUrl: string | null;
   pendingChats?: number;
   chatOpen: boolean;
@@ -49,13 +53,7 @@ export function Sidebar({
   return (
     <aside className="flex flex-col bg-ink text-paper md:sticky md:top-0 md:h-dvh md:min-h-0">
       <div className="px-5 py-4 md:py-6">
-        <p className="flex gap-2" aria-hidden="true">
-          <span className="h-3 w-3 rounded-full bg-pine" />
-          <span className="h-3 w-3 rounded-full bg-indigo" />
-          <span className="h-3 w-3 rounded-full bg-amber" />
-          <span className="h-3 w-3 rounded-full bg-rose" />
-        </p>
-        <p className="mt-3 font-serif text-2xl leading-none tracking-tight">Campaign desk</p>
+        <BrandMark tone="paper" />
       </div>
       <nav className="flex gap-1 overflow-x-auto px-3 pb-4 md:flex-col md:overflow-visible">
         {links.map((link) => {
@@ -85,7 +83,7 @@ export function Sidebar({
           onClick={onToggleChat}
         >
           <MessageCircle size={16} aria-hidden="true" />
-          Chat
+          Marketer
           {pendingChats > 0 ? (
             <span
               className={cn(
@@ -123,6 +121,7 @@ export function Sidebar({
           <span className="min-w-0">
             <span className="block truncate text-sm font-semibold leading-tight">{name}</span>
             <span className="block truncate text-xs leading-tight text-paper/80">{email}</span>
+            <span className="block truncate text-xs leading-tight text-paper/60">{roleLabel}</span>
           </span>
         </button>
       </div>

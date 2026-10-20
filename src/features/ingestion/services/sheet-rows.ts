@@ -52,6 +52,8 @@ const ALIASES: Record<string, string> = {
   amount_spent_usd: "spend",
   cost: "spend",
   budget: "daily_budget",
+  budget_day: "daily_budget",
+  budget__day: "daily_budget",
   day: "date",
 };
 

@@ -14,12 +14,14 @@ export function LoginForm({
   demoEmail,
   demoPassword,
   showDemo,
+  startMode = "sign-in",
 }: {
   demoEmail: string;
   demoPassword: string;
   showDemo: boolean;
+  startMode?: "sign-in" | "sign-up";
 }) {
-  const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
+  const [mode, setMode] = useState<"sign-in" | "sign-up">(startMode);
   const [showPassword, setShowPassword] = useState(false);
   const [notice, setNotice] = useState<AuthNotice | null>(null);
   const [waiting, setWaiting] = useState(false);
@@ -67,7 +69,7 @@ export function LoginForm({
 
   return (
     <form onSubmit={onSubmit} className="relative space-y-4">
-      <h1 className="font-serif text-4xl tracking-tight">{signingUp ? "Create account" : "Sign in"}</h1>
+      <h1 className="font-sans font-semibold tracking-tight text-4xl tracking-tight">{signingUp ? "Create account" : "Sign in"}</h1>
       <div className="absolute -left-[9999px] h-0 overflow-hidden" aria-hidden="true">
         <label htmlFor="company-website">Website</label>
         <input id="company-website" name="website" tabIndex={-1} autoComplete="off" />

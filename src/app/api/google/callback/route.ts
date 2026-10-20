@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+import { deny } from "@/features/auth/services/access";
 import { getCurrentUser } from "@/features/auth/services/require-user";
 import { exchangeGoogleCode, googleRefreshCookie, takeGoogleState } from "@/features/ingestion/services/google-auth";
 import { storeGoogleRefresh } from "@/features/ingestion/services/google-refresh-store";
@@ -10,6 +11,9 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const user = await getCurrentUser();
   if (!user) return NextResponse.redirect(new URL("/login", url));
+  if (deny(user, "sync")) {
+    return NextResponse.redirect(new URL("/campaigns?google=failed", url));
+  }
 
   const stateOk = await takeGoogleState(url.searchParams.get("state"));
   const code = url.searchParams.get("code");

@@ -12,16 +12,18 @@ export function StatusSwitch({
   id,
   name,
   status,
+  canChange = true,
 }: {
   id: string;
   name: string;
   status: CampaignStatus;
+  canChange?: boolean;
 }) {
   const router = useRouter();
   const [note, setNote] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  if (status === "ended") {
+  if (status === "ended" || !canChange) {
     return <Badge value={status} />;
   }
 

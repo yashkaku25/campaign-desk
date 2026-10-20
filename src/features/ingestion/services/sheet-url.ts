@@ -5,6 +5,17 @@ export function sheetIdFromUrl(raw: string): string | null {
   return match?.[1] ?? null;
 }
 
+export function normalizeModelCsv(csv: string): string {
+  let text = csv.trim();
+  if (text.startsWith("```")) {
+    text = text.replace(/^```(?:csv)?\s*/i, "").replace(/```$/, "").trim();
+  }
+  if (!text.includes("\n") && text.includes("\\n")) {
+    text = text.replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n");
+  }
+  return text;
+}
+
 export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];

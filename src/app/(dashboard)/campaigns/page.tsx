@@ -1,3 +1,5 @@
+import { accessOf } from "@/features/auth/services/access";
+import { requireUser } from "@/features/auth/services/require-user";
 import { CampaignTable } from "@/features/campaigns/components/campaign-table";
 import { SheetLink } from "@/features/ingestion/components/sheet-link";
 import { currentSheetConnection } from "@/features/ingestion/services/connect-sheet";
@@ -11,6 +13,8 @@ const googleNotes: Record<string, { ok: boolean; message: string }> = {
 };
 
 export default async function CampaignsPage({ searchParams }: { searchParams: Promise<{ google?: string }> }) {
+  const user = await requireUser();
+  const access = accessOf(user);
   const campaigns = await listCampaigns();
   const quote = await getQuote();
   const connection = await currentSheetConnection();
@@ -18,15 +22,16 @@ export default async function CampaignsPage({ searchParams }: { searchParams: Pr
   const googleNote = params.google ? googleNotes[params.google] : undefined;
   return (
     <div className="space-y-6">
-      <h1 className="font-serif text-4xl tracking-tight">Campaigns</h1>
+      <h1 className="font-sans font-semibold tracking-tight text-4xl tracking-tight">Campaigns</h1>
       <SheetLink
         url={connection.url}
         connected={connection.connected}
         ready={connection.ready}
         startUrl={connection.startUrl}
         initialNotice={googleNote}
+        canSync={access.canSync}
       />
-      <CampaignTable campaigns={campaigns} quote={quote} />
+      <CampaignTable campaigns={campaigns} quote={quote} canChange={access.canApprove} />
     </div>
   );
 }

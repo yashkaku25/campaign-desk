@@ -10,9 +10,17 @@ export function middleware(request: NextRequest) {
     backend === "supabase"
       ? request.cookies.getAll().some((cookie) => cookie.name.includes("-auth-token"))
       : request.cookies.has(SESSION_COOKIE);
+  if (pathname === "/" && !signedIn) {
+    return NextResponse.rewrite(new URL("/welcome", request.url));
+  }
+  if (pathname === "/welcome" && signedIn) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
   const isPrivate =
     pathname === "/" ||
     pathname.startsWith("/campaigns") ||
+    pathname.startsWith("/practice") ||
+    pathname.startsWith("/simulation") ||
     pathname.startsWith("/audit") ||
     pathname.startsWith("/settings");
 
@@ -23,5 +31,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/campaigns/:path*", "/audit", "/settings"],
+  matcher: ["/", "/welcome", "/login", "/campaigns/:path*", "/practice", "/simulation", "/audit", "/settings"],
 };

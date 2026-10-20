@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseCsv, sheetIdFromUrl } from "@/features/ingestion/services/sheet-url";
+import { normalizeModelCsv, parseCsv, sheetIdFromUrl } from "@/features/ingestion/services/sheet-url";
 
 describe("sheetIdFromUrl", () => {
   it("reads the id from a Google Sheet link", () => {
@@ -9,6 +9,17 @@ describe("sheetIdFromUrl", () => {
 
   it("refuses a link that is not a Google Sheet", () => {
     expect(sheetIdFromUrl("https://example.com/spreadsheets/d/abc")).toBeNull();
+  });
+});
+
+describe("normalizeModelCsv", () => {
+  it("turns a one-line model reply into rows", () => {
+    const csv = normalizeModelCsv("campaign_name,status\\nSpring Launch,active\\nBrand Video,paused");
+    expect(parseCsv(csv)).toEqual([
+      ["campaign_name", "status"],
+      ["Spring Launch", "active"],
+      ["Brand Video", "paused"],
+    ]);
   });
 });
 

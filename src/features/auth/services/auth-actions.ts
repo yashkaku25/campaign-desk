@@ -3,12 +3,13 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { signInEmail } from "@/features/auth/services/gmail-address";
 import { findLocalAccount, hashPassword, passwordMatchesHash, saveLocalAccount } from "@/features/auth/services/local-accounts";
 import { readSignInInput, readSignUpInput } from "@/features/auth/services/auth-input";
 import { demoUserId } from "@/features/auth/services/require-user";
 import { clearSessionCookie, writeSessionCookie } from "@/features/auth/services/session-cookie";
 import { passwordsMatch } from "@/features/auth/services/session-token";
-import { withLocalState } from "@/lib/data/local-store";
+import { readLocalState, withLocalState } from "@/lib/data/local-store";
 import { newRecordId } from "@/lib/data/seed";
 import { WORKSPACE_ID } from "@/lib/domain";
 import { env } from "@/lib/env";
@@ -94,7 +95,7 @@ export async function signUp(
       password: input.password,
       options: {
         data: { display_name: input.displayName, currency: input.currency },
-        emailRedirectTo: `${origin}/login`,
+        emailRedirectTo: `${origin}/api/auth/callback`,
       },
     });
     if (error) {
@@ -159,7 +160,12 @@ async function createLocalAccount(
   password: string,
   currency: "USD" | "EUR" | "GBP" | "CAD" | "INR",
 ): Promise<void> {
-  if (email === env.demoEmail.toLowerCase() || (await findLocalAccount(email))) {
+  const saved = await readLocalState();
+  const sameEmail =
+    email === env.demoEmail.toLowerCase() ||
+    saved.profiles.some((profile) => signInEmail(profile.email) === email) ||
+    (await findLocalAccount(email));
+  if (sameEmail) {
     throw new AppError({
       what: "That email already has an account.",
       why: "A person with this email is already saved.",
@@ -167,8 +173,19 @@ async function createLocalAccount(
       fix: "Sign in instead.",
     });
   }
+  const first = saved.profiles.length === 0;
+  const invited = saved.invites.some((invite) => signInEmail(invite.email) === email);
+  if (!first && !invited) {
+    throw new AppError({
+      what: "Ask an admin to invite this email first.",
+      why: "This Gmail is not on the invite list.",
+      file: "src/features/auth/services/auth-actions.ts",
+      fix: "Ask an admin to send an invite, then create the account.",
+    });
+  }
 
   const userId = newRecordId();
+  const role = first ? "admin" : "team";
   await saveLocalAccount({
     userId,
     email,
@@ -177,9 +194,23 @@ async function createLocalAccount(
   await withLocalState((state) => ({
     state: {
       ...state,
+      invites: state.invites.filter((invite) => signInEmail(invite.email) !== email),
       profiles: [
         ...state.profiles,
-        { id: userId, workspaceId: WORKSPACE_ID, displayName, email, currency, avatarUrl: null },
+        {
+          id: userId,
+          workspaceId: WORKSPACE_ID,
+          displayName,
+          email,
+          currency,
+          avatarUrl: null,
+          role,
+          canAsk: true,
+          canPropose: role === "admin",
+          canApprove: role === "admin",
+          canSync: role === "admin",
+          approveCapCents: role === "admin" ? 10_000_000 : 10_000,
+        },
       ],
     },
     result: undefined,
@@ -216,6 +247,7 @@ function signInMessage(message: string): string {
 function signUpMessage(message: string): string {
   const lower = message.toLowerCase();
   if (lower.includes("already")) return "That email already has an account. Sign in instead.";
+  if (lower.includes("invite")) return "Ask an admin to invite this email first.";
   if (lower.includes("invalid")) return "Enter a real email address.";
   if (lower.includes("password")) return "Use at least 8 characters in the password.";
   return "Could not create the account. Try again.";

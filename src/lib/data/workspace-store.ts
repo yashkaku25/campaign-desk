@@ -15,6 +15,7 @@ import type {
   TargetSnapshot,
 } from "@/lib/domain";
 import { WORKSPACE_ID } from "@/lib/domain";
+import { accessOf } from "@/features/auth/services/access";
 import { avatarUrlFromPath } from "@/features/profile/services/avatar-url";
 import { readLocalState, withLocalState } from "@/lib/data/local-store";
 import { newRecordId } from "@/lib/data/seed";
@@ -138,6 +139,7 @@ async function readSupabaseWorkspace(userId: string): Promise<AppState> {
     messages: (messageResult.data ?? []).map(mapMessage).filter((message) => threadIds.has(message.threadId)),
     actions: (actionResult.data ?? []).map(mapAction),
     audit: (auditResult.data ?? []).map(mapAudit),
+    invites: [],
   };
 }
 
@@ -292,7 +294,21 @@ function mapProfile(row: {
   email: string;
   currency?: Profile["currency"];
   avatar_path?: string | null;
+  role?: Profile["role"] | null;
+  can_ask?: boolean;
+  can_propose?: boolean;
+  can_approve?: boolean;
+  can_sync?: boolean;
+  approve_cap_cents?: number;
 }): Profile {
+  const access = accessOf({
+    role: row.role,
+    canAsk: row.can_ask,
+    canPropose: row.can_propose,
+    canApprove: row.can_approve,
+    canSync: row.can_sync,
+    approveCapCents: row.approve_cap_cents,
+  });
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -300,6 +316,7 @@ function mapProfile(row: {
     email: row.email,
     currency: row.currency ?? "USD",
     avatarUrl: avatarUrlFromPath(row.avatar_path),
+    ...access,
   };
 }
 
@@ -422,5 +439,19 @@ function readCreateSnapshot(value: Json | null): CreateSnapshot | null {
   if (typeof value.name !== "string" || typeof value.dailyBudgetCents !== "number" || value.status !== "active") {
     return null;
   }
-  return { name: value.name, dailyBudgetCents: value.dailyBudgetCents, status: "active" };
+  const strategyNote =
+    typeof value.strategyNote === "string" && value.strategyNote.trim()
+      ? value.strategyNote.trim().slice(0, 500)
+      : null;
+  const expectedOutcome =
+    typeof value.expectedOutcome === "string" && value.expectedOutcome.trim()
+      ? value.expectedOutcome.trim().slice(0, 500)
+      : null;
+  return {
+    name: value.name,
+    dailyBudgetCents: value.dailyBudgetCents,
+    status: "active",
+    strategyNote,
+    expectedOutcome,
+  };
 }

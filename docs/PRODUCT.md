@@ -71,6 +71,8 @@ These stay on the server or on your machine — **not** in GitHub:
 
 The browser may only see `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
+Full checklist: `docs/SECURITY.md`. Before push: `npm run check:secrets`.
+
 ---
 
 ## How a real change is saved

@@ -3,10 +3,23 @@ node_modules
 out
 .vercel
 *.tsbuildinfo
+.DS_Store
+
+# Local data and tokens — never commit
 data/google-refresh.json
 data/local-store.json
 data/local-accounts.json
 data/avatars
+
+# Secrets — never commit (keep .env.example only)
 .env
-.env.local
-.DS_Store
+.env.*
+!.env.example
+
+# Keys and cloud credential dumps
+*.pem
+*.p12
+*.key
+credentials.json
+service-account*.json
+**/google-credentials*.json

@@ -23,8 +23,8 @@ export default async function LoginPage({
         <div className="px-8 py-10">
           <LoginForm
             demoEmail={env.demoEmail}
-            demoPassword={env.dataBackend === "local" ? env.demoPassword : ""}
-            showDemo={env.dataBackend === "local"}
+            demoPassword={env.demoPassword}
+            showDemo={Boolean(env.demoEmail && env.demoPassword)}
             startMode={params.mode === "sign-up" ? "sign-up" : "sign-in"}
           />
         </div>

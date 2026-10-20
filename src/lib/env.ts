@@ -22,6 +22,24 @@ const schema = z
     GOOGLE_OAUTH_REDIRECT_URI: z.string().optional().default(""),
   })
   .superRefine((value, ctx) => {
+    const production = value.NODE_ENV === "production";
+
+    if (production && value.DATA_BACKEND === "local") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["DATA_BACKEND"],
+        message: "Production must use DATA_BACKEND=supabase, not local.",
+      });
+    }
+
+    if (production && value.SESSION_SECRET === "local-dev-only-change-before-any-real-deploy") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["SESSION_SECRET"],
+        message: "Set a unique SESSION_SECRET on Vercel. Do not use the local example value.",
+      });
+    }
+
     if (value.DATA_BACKEND !== "supabase") return;
     if (!value.NEXT_PUBLIC_SUPABASE_URL) {
       ctx.addIssue({
@@ -84,12 +102,15 @@ const raw = loadEnv();
  * Server configuration. SUPABASE_SERVICE_ROLE_KEY is intentionally unread.
  * v1 does not build a client with the service role.
  */
+const localDemo = raw.DATA_BACKEND === "local" && raw.NODE_ENV !== "production";
+
 export const env = {
   isProduction: raw.NODE_ENV === "production",
   dataBackend: raw.DATA_BACKEND,
   sessionSecret: raw.SESSION_SECRET,
-  demoEmail: raw.LOCAL_DEMO_EMAIL,
-  demoPassword: raw.LOCAL_DEMO_PASSWORD,
+  /** Only for local offline demo. Empty on production / Supabase. */
+  demoEmail: localDemo ? raw.LOCAL_DEMO_EMAIL : "",
+  demoPassword: localDemo ? raw.LOCAL_DEMO_PASSWORD : "",
   supabaseUrl: raw.NEXT_PUBLIC_SUPABASE_URL ?? "",
   supabaseAnonKey: raw.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   geminiApiKey: raw.GEMINI_API_KEY,

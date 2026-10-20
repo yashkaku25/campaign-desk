@@ -51,6 +51,8 @@ Live site: [https://campaign-desk-khaki.vercel.app](https://campaign-desk-khaki.
 - Admin can turn on or off ask / propose / approve / sync for team members.
 - Sheet sync and Google connect respect `can_sync`.
 - Production Supabase must run migrations **`0007_roles.sql`** and **`0008_sync_gates.sql`** so the database matches the app gates.
+  - `0007` is already on production (roles + `actor_may_apply`).
+  - Confirm `0008` with: `select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' and p.proname = 'actor_may_sync';` — if the count is `0`, paste and Run `supabase/migrations/0008_sync_gates.sql` in the Supabase SQL editor.
 
 ### Public page
 

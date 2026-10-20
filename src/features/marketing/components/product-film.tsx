@@ -3,25 +3,18 @@
 import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { BrandMark } from "@/components/brand/mark";
-
-const SCENE_MS = 5600;
+const SCENE_MS = 5200;
 
 const scenes = [
   {
-    id: "overview",
-    label: "Overview",
-    caption: "See what is live and what needs care on one screen.",
-  },
-  {
-    id: "campaigns",
-    label: "Campaigns",
-    caption: "Open a campaign. Read spend, results, and status.",
+    id: "desk",
+    label: "Desk",
+    caption: "Your campaigns on one desk.",
   },
   {
     id: "sheet",
     label: "Sheet",
-    caption: "Paste your Google Sheet. Sync puts those rows on the desk.",
+    caption: "Real spend, clicks, and results come from your Google Sheet.",
   },
   {
     id: "simulation",
@@ -30,9 +23,9 @@ const scenes = [
       "Write the ad and who it is for. You get a band for the next days. It can be wrong. It does not spend.",
   },
   {
-    id: "chat",
-    label: "Chat",
-    caption: "Ask for a change. Read the preview. Approve saves. Reject leaves it.",
+    id: "approve",
+    label: "Approve",
+    caption: "Chat can suggest a change. Nothing is saved until you Approve.",
   },
 ] as const;
 
@@ -75,138 +68,121 @@ export function ProductFilm() {
   const scene = scenes[index] ?? scenes[0];
 
   return (
-    <section className="mt-14" aria-label="How Campaign desk works">
-      <div className="overflow-hidden rounded-3xl border border-line bg-card shadow-[0_30px_70px_-40px_rgba(20,32,51,0.55)]">
-        <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
-          <BrandMark />
-          <button
-            type="button"
-            className="inline-flex size-9 items-center justify-center rounded-full bg-ink text-paper"
-            aria-label={playing ? "Pause" : "Play"}
-            aria-pressed={playing}
-            onClick={() => setPlaying((current) => !current)}
-          >
-            {playing ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
-          </button>
-        </div>
-        <div className="min-h-80 px-4 py-6 md:px-8 md:py-8">
-          <div key={scene.id} className="landing-scene-fade">
+    <section className="landing-film" aria-label="How Campaign desk works">
+      <div className="landing-film-stage">
+        <button
+          type="button"
+          className="landing-film-play"
+          aria-label={playing ? "Pause" : "Play"}
+          aria-pressed={playing}
+          onClick={() => setPlaying((current) => !current)}
+        >
+          {playing ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+        </button>
+        <div className="landing-film-screen">
+          <div key={scene.id} className="landing-scene-fade landing-film-body">
             <Scene id={scene.id} />
           </div>
         </div>
-        <div className="h-1 bg-line">
-          <span ref={barRef} className="block h-full origin-left bg-ink" style={{ transform: "scaleX(0)" }} />
+        <div className="landing-film-progress" aria-hidden="true">
+          <span ref={barRef} />
         </div>
       </div>
-      <p className="mt-4 text-base leading-7 text-ink">{scene.caption}</p>
-      <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Parts of the walkthrough">
-        {scenes.map((item, itemIndex) => {
-          const selected = itemIndex === index;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              className={
-                selected
-                  ? "rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-paper"
-                  : "rounded-full border border-line bg-card px-3 py-1.5 text-sm font-semibold text-ink"
-              }
-              onClick={() => go(itemIndex)}
-            >
-              {item.label}
-            </button>
-          );
-        })}
+
+      <div className="landing-film-meta">
+        <p className="landing-film-caption">{scene.caption}</p>
+        <div className="landing-film-tabs" role="tablist" aria-label="Parts of the walkthrough">
+          {scenes.map((item, itemIndex) => {
+            const selected = itemIndex === index;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                className={selected ? "is-active" : undefined}
+                onClick={() => go(itemIndex)}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 }
 
 function Scene({ id }: { id: (typeof scenes)[number]["id"] }) {
-  if (id === "overview") {
+  if (id === "desk") {
     return (
-      <div className="mx-auto grid max-w-lg gap-3 md:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-paper px-4 py-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-pine">Live</p>
-          <p className="mt-2 text-lg font-semibold tracking-tight">Spring sale</p>
-          <p className="mt-1 text-sm text-muted">On · healthy click rate</p>
-        </div>
-        <div className="rounded-2xl border border-line bg-paper px-4 py-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-clay">Needs care</p>
-          <p className="mt-2 text-lg font-semibold tracking-tight">Cart 30d</p>
-          <p className="mt-1 text-sm text-muted">Spend up · few results</p>
-        </div>
+      <div className="landing-scene">
+        <p className="landing-scene-kicker">Campaigns</p>
+        <table className="landing-scene-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Spend</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Quiet hair dryer</td>
+              <td>50.00 $</td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td>Cart 7d</td>
+              <td>28.00 $</td>
+              <td>Paused</td>
+            </tr>
+            <tr>
+              <td>Prospect Feed</td>
+              <td>41.00 $</td>
+              <td>Active</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    );
-  }
-  if (id === "campaigns") {
-    return (
-      <table className="w-full text-left text-sm">
-        <thead className="text-muted">
-          <tr>
-            <th className="pb-3 font-medium">Campaign</th>
-            <th className="pb-3 text-right font-medium">Spend</th>
-            <th className="pb-3 text-right font-medium">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="border-t border-line">
-            <td className="py-3 font-semibold">Quiet hair dryer</td>
-            <td className="py-3 text-right tabular-nums">50.00 $</td>
-            <td className="py-3 text-right">Active</td>
-          </tr>
-          <tr className="border-t border-line">
-            <td className="py-3 font-semibold">Cart 7d</td>
-            <td className="py-3 text-right tabular-nums">28.00 $</td>
-            <td className="py-3 text-right">Paused</td>
-          </tr>
-        </tbody>
-      </table>
     );
   }
   if (id === "sheet") {
     return (
-      <div className="mx-auto max-w-md space-y-3">
-        <p className="text-sm text-muted">Google Sheet link</p>
-        <div className="rounded-2xl border border-dashed border-line px-4 py-3 font-mono text-xs text-muted">
-          docs.google.com/spreadsheets/…
-        </div>
-        <span className="inline-flex rounded-full bg-pine px-3 py-1.5 text-sm font-semibold text-paper">Sync</span>
-        <p className="text-sm leading-6 text-muted">Spend, clicks, and results land on the desk.</p>
+      <div className="landing-scene landing-scene-narrow">
+        <p className="landing-scene-kicker">Google Sheet</p>
+        <p className="landing-scene-mono">docs.google.com/spreadsheets/…</p>
+        <span className="landing-scene-chip">Sync</span>
+        <p className="landing-scene-note">Spend, clicks, and results land on the desk.</p>
       </div>
     );
   }
   if (id === "simulation") {
     return (
-      <div className="mx-auto grid max-w-lg gap-4 md:grid-cols-[1fr_auto]">
+      <div className="landing-scene landing-scene-split">
         <div>
-          <p className="text-sm text-muted">Next 7 days</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight">40 to 70 clicks</p>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            Simulation. This can be wrong. It does not spend.
-          </p>
+          <p className="landing-scene-kicker">Next 7 days</p>
+          <p className="landing-scene-hero-num">40 to 70 clicks</p>
+          <p className="landing-scene-note">Simulation. This can be wrong. It does not spend.</p>
         </div>
-        <div className="flex h-40 w-24 flex-col justify-between rounded-[1.4rem] border border-line bg-paper p-2 shadow-sm">
-          <div className="h-2 w-8 self-center rounded-full bg-line" />
-          <p className="text-[10px] font-semibold leading-tight">Quiet hair dryer</p>
-          <p className="text-[9px] leading-snug text-muted">It dries hair without the roar.</p>
-          <div className="h-10 rounded-lg border border-dashed border-line" />
+        <div className="landing-scene-ad">
+          <p className="landing-scene-ad-title">Quiet hair dryer</p>
+          <p className="landing-scene-note">It dries hair without the roar.</p>
+          <div className="landing-scene-ad-media" />
         </div>
       </div>
     );
   }
   return (
-    <div className="mx-auto max-w-md rounded-2xl border border-line p-4">
-      <p className="text-sm text-muted">Chat preview</p>
-      <p className="mt-1 text-lg font-semibold tracking-tight">Create · Prospect Feed</p>
-      <p className="mt-2 text-sm leading-6 text-muted">
-        Strategy: cold people on Feed. Expect learning for a few days. Approve saves it.
+    <div className="landing-scene landing-scene-narrow">
+      <p className="landing-scene-kicker">Chat preview</p>
+      <p className="landing-scene-title">Create · Prospect Feed</p>
+      <p className="landing-scene-note">
+        Strategy: cold people on Feed. Expect learning for a few days.
       </p>
-      <div className="mt-4 flex gap-2">
-        <span className="rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-paper">Approve</span>
-        <span className="rounded-full border border-line px-3 py-1.5 text-sm font-semibold">Reject</span>
+      <div className="landing-scene-actions">
+        <span className="landing-scene-chip is-ink">Approve</span>
+        <span className="landing-scene-chip is-ghost">Reject</span>
       </div>
     </div>
   );

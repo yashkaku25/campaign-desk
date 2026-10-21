@@ -169,7 +169,7 @@ export function DeliveryDrawer({
     }
     if (urlRead.looksLikeTest && !messagePath) {
       lines.push(
-        `People open ${urlRead.host} and read a test/placeholder URL — many leave before the form.`,
+        `People open ${urlRead.host} and read a test/placeholder URL. Many leave before the form.`,
       );
     }
     if (thinBudget) {
@@ -181,7 +181,7 @@ export function DeliveryDrawer({
       lines.push(`Your audience note is in play: “${adSet.audienceNote.trim()}”.`);
     }
     if (counts.clicked > 0 && counts.landing === 0 && !messagePath) {
-      lines.push("Clicks are not becoming landing views in the live window yet — keep watching.");
+      lines.push("Clicks are not becoming landing views in the live window yet. Keep watching.");
     }
     if (
       counts.landing > 0 &&
@@ -201,7 +201,7 @@ export function DeliveryDrawer({
       lines.push(`${counts.hid} hid the ad. Change creative ${ad.creatives.length > 1 ? "A/B" : ""}.`);
     }
     if (counts.reported >= 1) {
-      lines.push(`${counts.reported} reported the ad. Creative or audience fit is wrong — pause and rewrite.`);
+      lines.push(`${counts.reported} reported the ad. Creative or audience fit is wrong. Pause and rewrite.`);
     }
     if (lines.length <= 1 && counts.stopped > 0) {
       lines.push("People are stopping. Watch whether they open the path and finish.");
@@ -227,7 +227,7 @@ export function DeliveryDrawer({
         ? String(counts.purchases)
         : strip.results != null
           ? formatCount(strip.results)
-          : "—";
+          : "n/a";
 
   return (
     <div className="fixed inset-y-0 right-0 z-[55] flex w-full max-w-[560px] flex-col border-l border-[var(--meta-line)] bg-[var(--meta-card)] shadow-2xl">
@@ -256,7 +256,7 @@ export function DeliveryDrawer({
               </p>
             ) : (
               <p className="mt-1 text-[11px] text-[var(--meta-ink)]">
-                People finish in {where} — not on a website thank-you page.
+                People finish in {where}, not on a website thank-you page.
               </p>
             )}
           </div>
@@ -269,9 +269,9 @@ export function DeliveryDrawer({
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
           <div className="grid grid-cols-2 gap-2 text-[12px] sm:grid-cols-4">
-            <Metric label="Reach" value={strip.reach != null ? formatCount(strip.reach) : "—"} />
-            <Metric label="Frequency" value={strip.frequency != null ? String(strip.frequency) : "—"} />
-            <Metric label="Link CTR" value={strip.linkCtr != null ? `${strip.linkCtr}%` : "—"} />
+            <Metric label="Reach" value={strip.reach != null ? formatCount(strip.reach) : "n/a"} />
+            <Metric label="Frequency" value={strip.frequency != null ? String(strip.frequency) : "n/a"} />
+            <Metric label="Link CTR" value={strip.linkCtr != null ? `${strip.linkCtr}%` : "n/a"} />
             <Metric
               label={messagePath ? "Conversations" : resultNoun(campaign.objective)}
               value={resultValue}

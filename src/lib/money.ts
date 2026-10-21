@@ -11,7 +11,7 @@ export function formatCount(value: number): string {
 }
 
 export function formatCtr(ctr: number | null): string {
-  if (ctr === null) return "—";
+  if (ctr === null) return "n/a";
   return `${(ctr * 100).toFixed(2)}%`;
 }
 

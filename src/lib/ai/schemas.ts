@@ -20,9 +20,9 @@ const actionSchema = z.discriminatedUnion("type", [
     type: z.literal("create_campaign"),
     name: z.string().trim().min(1).max(120),
     dailyBudgetCents: z.number().int(),
-    /** Marketer strategy for the create — shown on preview and kept for audit context. */
+    /** Marketer strategy for the create, shown on preview and kept for audit context. */
     strategyNote: z.string().trim().min(1).max(500).optional(),
-    /** What the marketer expects after Approve — not a guarantee. */
+    /** What the marketer expects after Approve, not a guarantee. */
     expectedOutcome: z.string().trim().min(1).max(500).optional(),
   }),
   z.object({

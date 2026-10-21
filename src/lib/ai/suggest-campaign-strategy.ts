@@ -54,7 +54,7 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "prospect_feed",
     label: "Cold prospect · Feed",
-    name: (ctx) => uniqueName(`${ctx.product} — Prospect Feed`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · Prospect Feed`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 4000),
     strategyNote: () =>
       "Cold / broad interest on Feed. New creative angle from the sheet offer. Exclude purchasers if you have a list.",
@@ -64,8 +64,8 @@ const STRATEGIES: StrategySeed[] = [
       [
         `Strategy: Cold prospect on Feed for “${ctx.product}”.`,
         ctx.weak[0]
-          ? `Your sheet shows “${ctx.weak[0].name}” is weak — do not copy that creative; use a fresher angle.`
-          : "No weak set flagged — still keep the first week as a controlled test.",
+          ? `Your sheet shows “${ctx.weak[0].name}” is weak. Do not copy that creative; use a fresher angle.`
+          : "No weak set flagged. Still keep the first week as a controlled test.",
         "What to expect: delivery into learning, watch CTR and cost per result vs your stronger campaigns.",
         "Tracked: Approve the create preview to save the campaign; the audit log keeps the decision.",
       ].join(" "),
@@ -73,7 +73,7 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "retarget_cart",
     label: "Retarget cart · 7-day",
-    name: (ctx) => uniqueName(`${ctx.product} — Cart 7d`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · Cart 7d`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 3000),
     strategyNote: () =>
       "Site cart / add-to-cart window 7 days. Shorter window than 30d so you do not pay tired people.",
@@ -92,7 +92,7 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "lead_instant",
     label: "Leads · Instant Form",
-    name: (ctx) => uniqueName(`${ctx.product} — Instant Form`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · Instant Form`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 3500),
     strategyNote: () =>
       "Leads on Instant Form (inside Meta). Keep questions short: name, email, one custom. Privacy link required.",
@@ -109,12 +109,12 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "message_wa",
     label: "Messages · WhatsApp",
-    name: (ctx) => uniqueName(`${ctx.product} — WhatsApp`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · WhatsApp`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 2500),
     strategyNote: () =>
       "Conversion location WhatsApp. Result = started conversation. Staff must reply fast in the first minutes.",
     expectedOutcome: () =>
-      "Conversations, not purchases. Ghost rate rises if reply speed is slow — watch that before raising budget.",
+      "Conversations, not purchases. Ghost rate rises if reply speed is slow. Watch that before raising budget.",
     brief: () =>
       [
         "Strategy: Click-to-WhatsApp for high-intent shoppers.",
@@ -126,7 +126,7 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "asc_scale",
     label: "Scale winner · +20% budget",
-    name: (ctx) => uniqueName(`${(ctx.strong[0]?.name ?? ctx.product).slice(0, 40)} — Scale`, ctx),
+    name: (ctx) => uniqueName(`${(ctx.strong[0]?.name ?? ctx.product).slice(0, 40)} · Scale`, ctx),
     dailyBudgetCents: (ctx) =>
       Math.min(
         10_000_000,
@@ -134,8 +134,8 @@ const STRATEGIES: StrategySeed[] = [
       ),
     strategyNote: (ctx) =>
       ctx.strong[0]
-        ? `Scale the sheet winner “${ctx.strong[0].name}” with a sibling campaign / higher daily budget — not a blind Advantage+ dump.`
-        : "No clear winner yet — this is a controlled scale test at a modest daily budget.",
+        ? `Scale the sheet winner “${ctx.strong[0].name}” with a sibling campaign / higher daily budget, not a blind Advantage+ dump.`
+        : "No clear winner yet. This is a controlled scale test at a modest daily budget.",
     expectedOutcome: () =>
       "Spend rises; CPR should stay near the winner. If CPR jumps >30%, pull back.",
     brief: (ctx) =>
@@ -150,7 +150,7 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "creative_ab",
     label: "Creative A/B · same audience",
-    name: (ctx) => uniqueName(`${ctx.product} — Creative A/B`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · Creative A/B`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 4500),
     strategyNote: (ctx) => {
       const hint = ctx.hints[0];
@@ -172,18 +172,18 @@ const STRATEGIES: StrategySeed[] = [
   {
     id: "cut_waste",
     label: "Replace waste · new angle",
-    name: (ctx) => uniqueName(`${ctx.product} — Fresh Angle`, ctx),
+    name: (ctx) => uniqueName(`${ctx.product} · Fresh Angle`, ctx),
     dailyBudgetCents: (ctx) => budgetNear(ctx, 3500),
     strategyNote: (ctx) =>
       ctx.weak[0]
-        ? `Replace waste from “${ctx.weak[0].name}” with a new named test — pause the weak set separately after Approve.`
+        ? `Replace waste from “${ctx.weak[0].name}” with a new named test. Pause the weak set separately after Approve.`
         : "Fresh angle test while the account is stable.",
     expectedOutcome: () =>
       "If the new angle is healthier after a few days, pause the old weak set. Do not run both forever.",
     brief: (ctx) =>
       [
         ctx.weak[0]
-          ? `Strategy: Your sheet flags “${ctx.weak[0].name}” as weak — launch a fresh-angle campaign instead of pouring budget into it.`
+          ? `Strategy: Your sheet flags “${ctx.weak[0].name}” as weak. Launch a fresh-angle campaign instead of pouring budget into it.`
           : "Strategy: Fresh-angle test for learning.",
         "What to expect: early CTR signal within a few days; pair with a pause on the weak set if you Approve both moves over time.",
         "Tracked: this create preview is one decision; pause the weak set as a second Approve when ready.",
@@ -210,7 +210,7 @@ export function suggestCampaignStrategyActions(
           "",
           ...picks.map(
             (seed, index) =>
-              `${index + 1}. ${seed.label} — ${seed.strategyNote(ctx)} Expect: ${seed.expectedOutcome(ctx)}`,
+              `${index + 1}. ${seed.label}: ${seed.strategyNote(ctx)} Expect: ${seed.expectedOutcome(ctx)}`,
           ),
           "",
           "Nothing is saved until you Approve a create preview. Audit keeps every Approve/Reject.",
@@ -241,7 +241,7 @@ export function suggestCampaignStrategyActions(
         `Strategy note: ${strategyNote}`,
         `What to expect: ${expectedOutcome}`,
         `Daily budget proposed: ${formatDollars(dailyBudgetCents)}.`,
-        "Approve the create preview to save it on the desk. Reject leaves campaigns unchanged. Ask again for a different strategy — I rotate tests.",
+        "Approve the create preview to save it on the desk. Reject leaves campaigns unchanged. Ask again for a different strategy. I rotate tests.",
       ].join(" "),
     },
   ];

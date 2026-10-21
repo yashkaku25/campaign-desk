@@ -21,7 +21,7 @@ const ADMIN_ACCESS: Access = {
   approveCapCents: MAX_DAILY_BUDGET_CENTS,
 };
 
-/** Least privilege when role is missing or unknown — never fail open to admin. */
+/** Least privilege when role is missing or unknown, never fail open to admin. */
 const TEAM_DEFAULT: Access = {
   role: "team",
   canAsk: true,

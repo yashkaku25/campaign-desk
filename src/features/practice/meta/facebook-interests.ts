@@ -1,7 +1,7 @@
 /**
  * Facebook interest catalog for Simulation targeting.
  * Source: The-Complete-List-of-Facebook-Interests.pdf (user Downloads).
- * Built by scripts/build-facebook-interests.py — re-run that script if the PDF changes.
+ * Built by scripts/build-facebook-interests.py, re-run that script if the PDF changes.
  */
 
 export interface FacebookInterest {

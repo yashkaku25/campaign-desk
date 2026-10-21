@@ -44,7 +44,7 @@ export function seedAccountFromDesk(seeds: DeskSeed[]): MetaAccountState {
     adSets.push({
       id: adSetId,
       campaignId,
-      name: `${seed.name} — Ad set`,
+      name: `${seed.name} · Ad set`,
       on,
       delivery,
       audienceKind: "site_cart",
@@ -87,7 +87,7 @@ export function seedAccountFromDesk(seeds: DeskSeed[]): MetaAccountState {
       id: adId,
       adSetId,
       campaignId,
-      name: `${seed.name} — Ad`,
+      name: `${seed.name} · Ad`,
       on,
       delivery,
       pageName: "Studio Page",
@@ -110,7 +110,7 @@ export function seedAccountFromDesk(seeds: DeskSeed[]): MetaAccountState {
         {
           id: `${adId}-b`,
           label: "B",
-          headline: prefill.headlineB || `${seed.name} — B`,
+          headline: prefill.headlineB || `${seed.name} · B`,
           primaryText: prefill.primaryTextB || prefill.primaryText,
           description: prefill.product || "",
           hasImage: true,

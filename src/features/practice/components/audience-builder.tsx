@@ -142,7 +142,7 @@ export function AudienceBuilder({
 
       <section className="space-y-2 rounded-md border border-[var(--meta-line)] bg-[var(--meta-card)] p-3">
         <p className="text-[12px] font-semibold text-[var(--meta-ink)]">Custom audiences & lookalikes</p>
-        <p className="text-[11px] text-[var(--meta-muted)]">Your site, list, video, and engagers — the warmest people.</p>
+        <p className="text-[11px] text-[var(--meta-muted)]">Your site, list, video, and engagers: the warmest people.</p>
         <div className="flex flex-wrap gap-1.5">
           <Chip
             active={value.customAudiences.includes("cold")}
@@ -208,7 +208,7 @@ export function AudienceBuilder({
         <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
           <input
             className="meta-input"
-            placeholder="Search interests — e.g. yoga, digital marketing, dogs…"
+            placeholder="Search interests, like yoga, digital marketing, dogs…"
             value={interestQuery}
             onChange={(e) => setInterestQuery(e.target.value)}
           />
@@ -243,7 +243,7 @@ export function AudienceBuilder({
             </p>
           ) : interestQuery.trim() === "" && interestGroup === "all" ? (
             <p className="mt-2 px-1 text-[11px] text-[var(--meta-muted)]">
-              Showing a starter set — search or pick a category to browse all {INTEREST_LEAVES.length}.
+              Showing a starter set. Search or pick a category to browse all {INTEREST_LEAVES.length}.
             </p>
           ) : null}
         </div>

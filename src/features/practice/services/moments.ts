@@ -46,7 +46,7 @@ const DAY_PAUSE_MS = 1200;
 
 const PLACEMENTS: Array<"feed" | "reels" | "stories"> = ["feed", "reels", "stories"];
 
-/** Turns a finished week into timed research journeys — not one-line feelings. */
+/** Turns a finished week into timed research journeys, not one-line feelings. */
 export function buildMoments(run: PracticeRun, product: string, destinationUrl?: string): ShopperMoment[] {
   const moments: ShopperMoment[] = [];
   let t = 400;
@@ -173,7 +173,7 @@ function marketerLine(step: JourneyStep, creative: "A" | "B", placement: string)
   if (step === "mismatched" || step === "left") {
     return "People opened the link, researched, then left. Fix the URL/page match before you raise budget.";
   }
-  return "Watch the research path — stop → URL → scroll → result.";
+  return "Watch the research path: stop → URL → scroll → result.";
 }
 
 export interface MomentCounts {

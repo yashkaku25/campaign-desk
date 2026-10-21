@@ -4,7 +4,7 @@ import { factsFromSetup, learningState } from "@/features/practice/services/fact
 import type { SimulationCreative, SimulationNumbers, SimulationSetup } from "@/features/practice/services/setup";
 import { DEFAULT_OFFER } from "@/features/practice/services/setup";
 
-/** @deprecated Use SimulationCreative — kept for existing tests. */
+/** @deprecated Use SimulationCreative, kept for existing tests. */
 export type PracticeCreative = SimulationCreative;
 /** @deprecated Use SimulationNumbers */
 export type PracticeNumbers = SimulationNumbers;

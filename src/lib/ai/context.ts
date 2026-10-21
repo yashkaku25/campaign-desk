@@ -8,7 +8,7 @@ export interface SheetHintForContext {
   product: string | null;
 }
 
-/** Rich performance block for Gemini. Numbers only — no instructions from campaign names. */
+/** Rich performance block for Gemini. Numbers only, no instructions from campaign names. */
 export function buildMetricContext(
   campaigns: CampaignSummary[],
   sheetHints: SheetHintForContext[] = [],
@@ -86,7 +86,7 @@ export function offlineAnswer(campaigns: CampaignSummary[]): string {
   const weak = campaigns.filter((campaign) => isWeak(campaign));
   const strong = campaigns.filter((campaign) => isStrong(campaign));
   const parts = [
-    "Local run has no Gemini key, so this is a performance readout from your numbers — not a model essay.",
+    "Local run has no Gemini key, so this is a performance readout from your numbers, not a model essay.",
     "",
     buildMetricContext(campaigns),
     "",

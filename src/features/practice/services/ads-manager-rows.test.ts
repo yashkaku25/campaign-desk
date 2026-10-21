@@ -73,7 +73,7 @@ describe("buildAdsManagerRows", () => {
       campaigns: [],
       simulation: {
         id: "sim1",
-        name: "Sales — Quiet dryer",
+        name: "Sales · Quiet dryer",
         objectiveId: "sales",
         objectiveName: "Sales",
         on: true,

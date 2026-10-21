@@ -68,11 +68,11 @@ function defaultCopy(name: string, spendCents: number, clicks: number, conversio
 }
 
 function alternateHeadline(headline: string, product: string): string {
-  if (/free trial|no card/i.test(headline)) return `${product || "This"} — try it this week`;
+  if (/free trial|no card/i.test(headline)) return `${product || "This"}, try it this week`;
   if (product && headline.toLowerCase().includes(product.toLowerCase())) {
     return `Why people keep the ${product}`;
   }
-  return `${headline} — shorter take`;
+  return `${headline} (shorter take)`;
 }
 
 function alternateCopy(primaryText: string, product: string): string {

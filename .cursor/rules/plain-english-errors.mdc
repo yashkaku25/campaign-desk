@@ -13,12 +13,12 @@ Each error includes:
 2. **Why** it failed, in words (keep the status code for the machine, and say what it means)
 3. **File** that failed, full path
 4. **Connected to** other files or services in the chain, when the failure crosses a boundary
-5. **Fix** — one next step
+5. **Fix**: one next step
 
 On screen, stay short. Put the file path and connections in the log, not in a stack trace on the page.
 
 ```ts
-// ❌ BAD — code only, no place, no cause
+// ❌ BAD: code only, no place, no cause
 return NextResponse.json({ error: "404" }, { status: 404 });
 catch (e) { console.error(e); }
 

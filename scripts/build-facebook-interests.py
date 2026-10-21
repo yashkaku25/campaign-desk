@@ -27,7 +27,7 @@ TOP = {
 # Keep ids used by DEFAULT_TARGETING / older simulation facts.
 # Prefer leaf labels when a mid-level and leaf would collide.
 LEGACY = {
-    # Keep Shopping vs Online shopping as separate ids — in-store vs digital.
+    # Keep Shopping vs Online shopping as separate ids, in-store vs digital.
     # (do not alias online_shopping → shopping)
     "luxury_goods": "luxury",
     "fashion_accessories": "fashion",
@@ -133,7 +133,7 @@ def main() -> None:
         seen2[it["id"]] = True
         final.append(it)
 
-    # Clarify store vs online — same Facebook tree, different shopper habits.
+    # Clarify store vs online, same Facebook tree, different shopper habits.
     LABEL_CLARITY = {
         "shopping": "Shopping (visit stores)",
         "online_shopping": "Online shopping",
@@ -162,7 +162,7 @@ def main() -> None:
         "/**",
         " * Facebook interest catalog for Simulation targeting.",
         " * Source: The-Complete-List-of-Facebook-Interests.pdf (user Downloads).",
-        " * Built by scripts/build-facebook-interests.py — re-run that script if the PDF changes.",
+        " * Built by scripts/build-facebook-interests.py, re-run that script if the PDF changes.",
         " */",
         "",
         "export interface FacebookInterest {",

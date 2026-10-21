@@ -176,7 +176,7 @@ export function CopilotDrawer({
         {messages.length === 0 && !waitingOn ? (
           <p className="text-sm text-muted">
             Your performance marketer reads the desk numbers. Ask it to optimize, explain spend, or propose a pause or
-            budget move — then Approve to save.
+            budget move, then Approve to save.
           </p>
         ) : null}
         <History messages={messages} previewById={previewById} skipIds={batchedIds} />
@@ -274,7 +274,7 @@ export function CopilotDrawer({
             }}
             maxLength={2000}
             rows={2}
-            placeholder='Ask your marketer — "optimize my campaigns", "why is spend up?", or "pause CTR under 2%"'
+            placeholder='Ask your marketer: "optimize my campaigns", "why is spend up?", or "pause CTR under 2%"'
             disabled={reading}
             className="min-h-11 w-full resize-none rounded-2xl border border-line bg-paper px-3 py-2 text-sm leading-5 outline-none focus:border-ink disabled:opacity-60"
           />

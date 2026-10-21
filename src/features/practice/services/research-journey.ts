@@ -115,11 +115,11 @@ export function buildPersonJourney(
     feelingName: noticeFeeling,
     thought: `On ${placementLabel(placement)} I see “${clip(headline, 42)}”${creativeLabel === "B" ? " (creative B)" : ""}.`,
     why: thinTest
-      ? `This is a small ~$${((setup.numbers?.dailyBudgetCents ?? 4000) / 100).toFixed(0)}/day test — people skim fast.`
+      ? `This is a small ~$${((setup.numbers?.dailyBudgetCents ?? 4000) / 100).toFixed(0)}/day test. People skim fast.`
       : `Headline and picture have to earn a stop in a noisy ${placementLabel(placement)}.`,
   });
 
-  // A minority abuse / report path — real Ads Manager noise.
+  // A minority abuse / report path, real Ads Manager noise.
   if (personIndex % 11 === 0) {
     beats.push({
       step: "reported",
@@ -138,7 +138,7 @@ export function buildPersonJourney(
       stage: "notice",
       act: "hide",
       feelingName: noticeFeeling ?? "Anger",
-      thought: `🚫 I hide it. ${noticeFeeling ? `${noticeFeeling} — ` : ""}${clip(headline, 36)} feels pushy or off.`,
+      thought: `🚫 I hide it. ${noticeFeeling ? `${noticeFeeling}, ` : ""}${clip(headline, 36)} feels pushy or off.`,
       why: "Hide is a creative/trust problem, not a bid problem.",
     });
     return beats;
@@ -175,7 +175,7 @@ export function buildPersonJourney(
       stage: "click",
       act: "scroll",
       feelingName: clickFeeling,
-      thought: "Interesting enough to glance — not enough to leave the feed.",
+      thought: "Interesting enough to glance, not enough to leave the feed.",
       why: "Stopped but did not click. Creative curiosity without a clear next step.",
     });
     return beats;
@@ -196,7 +196,7 @@ export function buildPersonJourney(
     act: "view_page",
     feelingName: null,
     thought: url.looksLikeTest
-      ? `The link opens ${url.host}${url.pathHint === "/" ? "" : url.pathHint}. That looks like a test or placeholder URL — I get wary.`
+      ? `The link opens ${url.host}${url.pathHint === "/" ? "" : url.pathHint}. That looks like a test or placeholder URL. I get wary.`
       : `Browser shows ${url.host}${url.pathHint === "/" ? "" : " " + url.pathHint}. I read the address before I trust the page.`,
     why: url.looksLikeTest
       ? "People read the URL. example.com / test / demo paths kill trust on a leads campaign."
@@ -217,7 +217,7 @@ export function buildPersonJourney(
     why:
       pageQuality !== "fast"
         ? "Slow or confusing pages burn the click you paid for."
-        : "Landing page view — now they research.",
+        : "Landing page view. Now they research.",
   });
 
   const scrollDepth = pageQuality === "fast" ? (personIndex % 3) + 1 : personIndex % 2;
@@ -229,7 +229,7 @@ export function buildPersonJourney(
       feelingName: null,
       thought:
         scrollDepth >= 2
-          ? `I scroll further — looking for proof, price, and whether ${product} is real.`
+          ? `I scroll further, looking for proof, price, and whether ${product} is real.`
           : "I skim the first screen only. If nothing clear, I am gone.",
       why: "Real research is scrolling. Depth drops when the page fights them.",
     });
@@ -329,7 +329,7 @@ function outcomeBeats(
         act: "lead",
         feelingName: payFeeling,
         thought: thinTest
-          ? `💬 I open ${where}, type one line, then ghost — small test ads feel unfinished.`
+          ? `💬 I open ${where}, type one line, then ghost. Small test ads feel unfinished.`
           : `💬 I message on ${where} about ${product}. Waiting to see if a human replies.`,
         why: `Message campaigns resolve in ${where}, not on a website thank-you page. Watch reply speed and first-message quality.`,
       },
@@ -342,7 +342,7 @@ function outcomeBeats(
           payFeeling === "Anxiety" || thinTest
             ? "I leave the chat. No one answered fast enough."
             : `Conversation started in ${where}. That is the result for this objective.`,
-        why: "For messages, a started conversation is the result — not a purchase.",
+        why: "For messages, a started conversation is the result, not a purchase.",
       },
     ];
   }
@@ -355,7 +355,7 @@ function outcomeBeats(
         act: "lead",
         feelingName: payFeeling,
         thought: thinTest
-          ? `📞 I tap Call, then hang up — a thin test ad does not earn my minutes.`
+          ? `📞 I tap Call, then hang up. A thin test ad does not earn my minutes.`
           : `📞 I tap Call about ${product}. The phone dialer opens.`,
         why: "Call campaigns finish on the phone dialer, not a website thank-you page.",
       },
@@ -382,10 +382,10 @@ function outcomeBeats(
         act: "lead",
         feelingName: payFeeling,
         thought: thinTest
-          ? `📝 Instant Form opens for ${product}. It already feels like a dry run — I hesitate.`
+          ? `📝 Instant Form opens for ${product}. It already feels like a dry run. I hesitate.`
           : longForm
             ? `📝 Instant Form asks a long list. I fill a few fields for ${product}, then stall.`
-            : `📝 Instant Form on Facebook/Instagram — name and email for ${product} if this still feels honest.`,
+            : `📝 Instant Form on Facebook/Instagram, name and email for ${product} if this still feels honest.`,
         why: "Instant Forms stay inside Meta. No website load. Question count and privacy link drive complete rate.",
       },
       payFeeling === "Anxiety" || thinTest || longForm
@@ -404,7 +404,7 @@ function outcomeBeats(
             stage: "pay" as const,
             act: "lead" as const,
             feelingName: payFeeling ?? "Trust",
-            thought: `I submit the Instant Form. ${product} — they can follow up.`,
+            thought: `I submit the Instant Form. ${product}, they can follow up.`,
             why: "Lead captured inside Meta’s Instant Form.",
           },
     ];
@@ -436,7 +436,7 @@ function outcomeBeats(
         stage: "pay",
         act: "share",
         feelingName: payFeeling ?? "Amusement",
-        thought: `I react / save — ${product} is worth a mark, not a purchase yet.`,
+        thought: `I react / save. ${product} is worth a mark, not a purchase yet.`,
         why: "Engagement objective ends at social action, not cart.",
       },
     ];
@@ -450,7 +450,7 @@ function outcomeBeats(
       act: "cart",
       feelingName: payFeeling,
       thought: `I add ${product} to cart while I keep reading reviews.`,
-      why: "Cart is research with intent — not yet a purchase.",
+      why: "Cart is research with intent, not yet a purchase.",
     },
     {
       step: "checkout",
@@ -474,7 +474,7 @@ function outcomeBeats(
           : `I buy ${product}. Research done.`,
       why:
         payFeeling === "Anxiety" || payFeeling === "Sting of paying"
-          ? "Purchase lost at payment — not a media problem."
+          ? "Purchase lost at payment, not a media problem."
           : "Purchase after full research path.",
     },
   ];

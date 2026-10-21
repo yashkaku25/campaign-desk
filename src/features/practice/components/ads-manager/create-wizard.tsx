@@ -135,8 +135,8 @@ export function CreateWizard({
     setDescription(next.product);
     if (seed) {
       setCampaignName(seed.name);
-      setAdSetName(`${seed.name} — Ad set`);
-      setAdName(`${seed.name} — Ad`);
+      setAdSetName(`${seed.name} · Ad set`);
+      setAdName(`${seed.name} · Ad`);
       setAdSetBudget(Math.max(1, Math.round(seed.dailyBudgetCents / 100)));
       setCampaignBudget(Math.max(1, Math.round(seed.dailyBudgetCents / 100)));
     }
@@ -147,8 +147,8 @@ export function CreateWizard({
     const seed = linked ?? seeds[0];
     const name = seed?.name || `${OBJECTIVE_COPY[objective].name} campaign`;
     if (!campaignName) setCampaignName(name);
-    if (!adSetName) setAdSetName(`${name} — Ad set`);
-    if (!adName) setAdName(`${name} — Ad`);
+    if (!adSetName) setAdSetName(`${name} · Ad set`);
+    if (!adName) setAdName(`${name} · Ad`);
     if (seed && !deskLink) applyDeskLink(seed.id);
     setStep("setup_path");
   }
@@ -283,7 +283,7 @@ export function CreateWizard({
       creatives.push({
         id: `${adId}-b`,
         label: "B",
-        headline: headlineB.trim() || `${campaign.name} — B`,
+        headline: headlineB.trim() || `${campaign.name} · B`,
         primaryText: primaryB.trim() || primaryA.trim(),
         description: description.trim(),
         hasImage: hasImage || mediaKindB === "image",
@@ -331,7 +331,7 @@ export function CreateWizard({
               {step === "objective" ? "Create new campaign" : stepTitle(step)}
             </h2>
             <p className="mt-0.5 text-[12px] text-[var(--meta-muted)]">
-              Simulation only — Publish runs a week on the desk. It does not spend on Meta.
+              Simulation only. Publish runs a week on the desk. It does not spend on Meta.
             </p>
           </div>
           <StepDots step={step} />
@@ -371,7 +371,7 @@ export function CreateWizard({
               </Field>
               <Field label="Link desk campaign (numbers + sheet copy)">
                 <select className="meta-input" value={deskLink} onChange={(e) => applyDeskLink(e.target.value)}>
-                  <option value="">None — blank simulation</option>
+                  <option value="">None (blank simulation)</option>
                   {seeds.map((seed) => (
                     <option key={seed.id} value={seed.id}>
                       {seed.name}
@@ -500,7 +500,7 @@ export function CreateWizard({
                       onChange={(e) => setCallPhoneNumber(e.target.value)}
                     />
                     <p className="mt-1 text-[11px] text-[var(--meta-muted)]">
-                      Tap Call opens the phone dialer. A started call is the result — not a website visit.
+                      Tap Call opens the phone dialer. A started call is the result, not a website visit.
                     </p>
                   </Field>
                 ) : null}
@@ -526,7 +526,7 @@ export function CreateWizard({
                       : conversionLocation === "instagram"
                         ? "Instagram inbox"
                         : "Messenger"}
-                    . No website required — optional fallback URL is on the Ad step.
+                    . No website required. An optional fallback URL is on the Ad step.
                   </p>
                 ) : null}
 
@@ -546,7 +546,7 @@ export function CreateWizard({
                     <div>
                       <p className="text-[12px] font-semibold text-[var(--meta-ink)]">Instant Form (inside Meta)</p>
                       <p className="text-[11px] text-[var(--meta-muted)]">
-                        People fill this on Facebook or Instagram — they do not open your site first.{" "}
+                        People fill this on Facebook or Instagram. They do not open your site first.{" "}
                         {summarizeInstantForm(instantForm)}
                       </p>
                     </div>
@@ -702,7 +702,7 @@ export function CreateWizard({
                     onChange={(e) => setPlacementMode(e.target.value as "advantage" | "manual")}
                   >
                     <option value="advantage">Advantage+ (Meta picks where to show)</option>
-                    <option value="manual">Manual — pick Facebook / Instagram / WhatsApp surfaces</option>
+                    <option value="manual">Manual: pick Facebook / Instagram / WhatsApp surfaces</option>
                   </select>
                   <p className="mt-1 text-[11px] text-[var(--meta-muted)]">
                     {summarizeSurfaces(placementMode, placementSurfaces)}
@@ -746,7 +746,7 @@ export function CreateWizard({
 
                 <Field label="Devices" className="sm:col-span-2">
                   <p className="mb-1.5 text-[11px] text-[var(--meta-muted)]">
-                    {summarizeDevices(devices)} — leave empty for all. Phones split Android vs iOS; tablets are separate.
+                    {summarizeDevices(devices)}. Leave empty for all. Phones split Android vs iOS; tablets are separate.
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {DEVICE_OPTIONS.map((device) => {
@@ -927,14 +927,14 @@ export function CreateWizard({
                         : conversionLocation === "messenger" ||
                             conversionLocation === "instagram" ||
                             conversionLocation === "whatsapp"
-                          ? "Fallback URL (optional — result happens in chat)"
+                          ? "Fallback URL (optional, result happens in chat)"
                           : "Deep link or fallback URL (optional)"
                     }
                   >
                     <input className="meta-input" value={url} onChange={(e) => setUrl(e.target.value)} />
                   </Field>
                   <CreativeUpload
-                    label="Creative A — upload image or video"
+                    label="Creative A: upload image or video"
                     headline={headlineA}
                     primary={primaryA}
                     description={description}
@@ -955,7 +955,7 @@ export function CreateWizard({
                   />
                   {abTest ? (
                     <CreativeUpload
-                      label="Creative B — upload image or video"
+                      label="Creative B: upload image or video"
                       headline={headlineB}
                       primary={primaryB}
                       description={description}
@@ -1012,7 +1012,7 @@ export function CreateWizard({
           {step === "review" ? (
             <div className="space-y-3 text-[13px]">
               <ReviewRow label="Buying type" value={BUYING_TYPES.find((item) => item.id === buyingType)?.name ?? buyingType} />
-              <ReviewRow label="Objective" value={objective ? OBJECTIVE_COPY[objective].name : "—"} />
+              <ReviewRow label="Objective" value={objective ? OBJECTIVE_COPY[objective].name : "n/a"} />
               <ReviewRow label="Setup" value={setupPath === "advantage" ? "Advantage+" : "Manual"} />
               <ReviewRow label="Campaign" value={campaignName} />
               <ReviewRow label="Ad set" value={adSetName} />
@@ -1034,7 +1034,7 @@ export function CreateWizard({
               />
               <ReviewRow
                 label="Results mean"
-                value={objective ? resultNoun(objective) : "—"}
+                value={objective ? resultNoun(objective) : "n/a"}
               />
               <ReviewRow label="Placements" value={summarizeSurfaces(placementMode, placementSurfaces)} />
               <ReviewRow label="Devices" value={summarizeDevices(devices)} />
@@ -1263,7 +1263,7 @@ function CreativeUpload({
           )}
         </div>
       ) : (
-        <p className="mt-2 text-[11px] text-[var(--meta-muted)]">PNG, JPG, WebP, or MP4 — stays in this browser for the simulation.</p>
+        <p className="mt-2 text-[11px] text-[var(--meta-muted)]">PNG, JPG, WebP, or MP4. It stays in this browser for the simulation.</p>
       )}
       <div className="mt-3 space-y-2">
         <Field label="Primary text">
@@ -1284,7 +1284,7 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4 border-b border-[var(--meta-line)] py-2">
       <span className="text-[var(--meta-muted)]">{label}</span>
-      <span className="text-right font-semibold">{value || "—"}</span>
+      <span className="text-right font-semibold">{value || "n/a"}</span>
     </div>
   );
 }

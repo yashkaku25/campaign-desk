@@ -1,7 +1,7 @@
 import type { FeelingRecord, ShopperAct } from "@/features/practice/emotions/types";
 
 const BY_FEELING: Record<string, string> = {
-  curiosity: "Wait — what is that?",
+  curiosity: "Wait, what is that?",
   desire: "I want that result.",
   recognition: "That looks like someone like me.",
   belonging: "People like me already bought this.",

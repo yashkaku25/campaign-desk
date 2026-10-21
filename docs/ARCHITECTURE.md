@@ -36,17 +36,17 @@ Each gate has one home.
 | --- | --- |
 | Environment keys | `src/lib/env.ts` only. Nothing else reads `process.env`. |
 | Gemini model id | `src/lib/ai/models.ts` |
-| Action allowlist | `src/lib/ai/schemas.ts` — `pause`, `resume`, `set_daily_budget`, `reallocate_budget`, `create_campaign`, `answer` |
-| System prompt | `src/lib/ai/prompts/system.ts` — campaign names are data, not instructions |
+| Action allowlist | `src/lib/ai/schemas.ts`: `pause`, `resume`, `set_daily_budget`, `reallocate_budget`, `create_campaign`, `answer` |
+| System prompt | `src/lib/ai/prompts/system.ts`: campaign names are data, not instructions |
 | Row matching | `src/features/campaigns/services/resolve-targets.ts` |
-| Caps | `src/features/campaigns/services/caps.ts` — 25 campaigns, daily budget $1 to $100,000 |
-| Preview record | `proposed_actions` — payload hash, target versions, 10-minute expiry |
+| Caps | `src/features/campaigns/services/caps.ts`: 25 campaigns, daily budget $1 to $100,000 |
+| Preview record | `proposed_actions`: payload hash, target versions, 10-minute expiry |
 | The only campaign write | Postgres `apply_campaign_action` when `DATA_BACKEND=supabase`. Local mirror: `src/features/campaigns/services/apply-campaign-action.ts` |
 | Sheet URL + metric upsert | Postgres `actor_may_sync` on `set_workspace_sheet` and `upsert_campaign_metric` (`0008_sync_gates.sql`). TypeScript `deny(user, "sync")` mirrors that. |
-| Roles / least privilege | `src/features/auth/services/access.ts` — only `role === "admin"` is full access; missing/unknown role is team with no write steps |
-| Rate limit | `src/lib/rate-limit.ts` — Upstash when configured, memory counter otherwise. 20 parses per user per hour |
-| Browser headers | `src/lib/security/headers.ts` — content policy, no framing, nosniff. HTTPS-only on the live site |
-| Email link address | `src/lib/security/app-origin.ts` — confirmation links stay on the live site or the local desk |
+| Roles / least privilege | `src/features/auth/services/access.ts`: only `role === "admin"` is full access; missing/unknown role is team with no write steps |
+| Rate limit | `src/lib/rate-limit.ts`: Upstash when configured, memory counter otherwise. 20 parses per user per hour |
+| Browser headers | `src/lib/security/headers.ts`: content policy, no framing, nosniff. HTTPS-only on the live site |
+| Email link address | `src/lib/security/app-origin.ts`: confirmation links stay on the live site or the local desk |
 | Errors | `src/lib/errors/log-error.ts` |
 | Plain chat text | Copilot components render strings as text. No HTML from the model |
 
@@ -74,7 +74,7 @@ src/features/campaigns/          list, detail, resolve, caps, apply
 src/features/copilot/            propose, approve, reject, drawer, preview
 src/features/ingestion/          Google Sheet connect + sync (can_sync)
 src/features/profile/            settings, team invites, role caps
-src/features/practice/           Simulation Ads Manager (local week only — no desk writes)
+src/features/practice/           Simulation Ads Manager (local week only, no desk writes)
 src/features/audit/              read the audit log
 src/lib/ai/                      Gemini, prompts, schema, parse
 src/lib/supabase/                browser and server clients
@@ -92,11 +92,11 @@ Each feature `index.ts` starts with a comment that says what that folder is allo
 Every table has `workspace_id` so a later multi-workspace version does not rewrite the schema. v1 has no workspace switcher.
 
 - `workspaces`, `profiles` (profile id matches the auth user)
-- `campaigns` — status `draft | active | paused | ended`, `daily_budget_cents`, `version`
-- `campaign_metrics_daily` — unique on campaign + day
+- `campaigns`: status `draft | active | paused | ended`, `daily_budget_cents`, `version`
+- `campaign_metrics_daily`: unique on campaign + day
 - `copilot_threads`, `copilot_messages`
-- `proposed_actions` — `pending | approved | rejected | expired | failed`
-- `audit_log` — insert and read only
+- `proposed_actions`: `pending | approved | rejected | expired | failed`
+- `audit_log`: insert and read only
 
 Anon with no session sees nothing.
 

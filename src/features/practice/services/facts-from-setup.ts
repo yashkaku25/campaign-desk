@@ -44,7 +44,7 @@ function factsFromTargeting(targeting: DetailedTargeting | undefined): string[] 
     if (interest === "family" || interest === "parents_all") facts.push("buying_for_someone", "shields_someone");
     if (interest === "luxury") facts.push("price_above_normal", "cares_about_rank");
     if (interest === "fashion") facts.push("people_like_me_bought", "wants_result");
-    // Store browsers vs online buyers — different research paths.
+    // Store browsers vs online buyers, different research paths.
     if (
       interest === "shopping" ||
       interest === "shopping_centres" ||

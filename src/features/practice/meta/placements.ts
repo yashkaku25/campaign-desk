@@ -1,5 +1,5 @@
 /**
- * Where the ad can show — Facebook, Instagram, Audience Network, Messenger, WhatsApp.
+ * Where the ad can show, Facebook, Instagram, Audience Network, Messenger, WhatsApp.
  * Advantage+ uses all eligible surfaces; manual lets the marketer pick.
  */
 
@@ -57,7 +57,7 @@ export type DeviceId = "android" | "ios" | "tablet" | "desktop";
 
 export const DEVICE_OPTIONS: readonly { id: DeviceId; label: string; blurb: string }[] = [
   { id: "android", label: "Android phones", blurb: "Phones on Android" },
-  { id: "ios", label: "iPhone (iOS)", blurb: "iPhones only — not iPad" },
+  { id: "ios", label: "iPhone (iOS)", blurb: "iPhones only, not iPad" },
   { id: "tablet", label: "Tablets", blurb: "iPad and Android tablets" },
   { id: "desktop", label: "Desktop", blurb: "Laptop and desktop browsers" },
 ] as const;

@@ -101,7 +101,7 @@ export interface MetaAdSet {
   bidStrategy: "lowest_cost" | "cost_cap" | "bid_cap";
   scheduleStart: string;
   scheduleEnd: string;
-  /** Where the result happens — website, Messenger, WhatsApp, form, etc. */
+  /** Where the result happens, website, Messenger, WhatsApp, form, etc. */
   conversionLocation: ConversionLocation;
   conversionLocationOther: string;
   /** Website people land on when conversion location is website. */

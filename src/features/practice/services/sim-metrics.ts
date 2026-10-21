@@ -26,11 +26,11 @@ export function buildMetricStrip(
   const learning = prediction?.learning ?? learningState(setup);
   const learningLabel =
     learning === "stable"
-      ? "Stable — about 50 results in a week"
+      ? "Stable: about 50 results in a week"
       : learning === "learning"
-        ? "Learning — still under about 50 results"
+        ? "Learning: still under about 50 results"
         : learning === "learning_limited"
-          ? "Learning limited — budget or audience is thin"
+          ? "Learning limited: budget or audience is thin"
           : "No sheet numbers yet";
 
   if (!numbers || numbers.impressions === 0) {

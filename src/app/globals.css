@@ -88,7 +88,7 @@ body {
   background: #e7dfd2;
 }
 
-/* Meta Ads Manager simulation shell — dense controls inside /simulation */
+/* Meta Ads Manager simulation shell, dense controls inside /simulation */
 .meta-input {
   width: 100%;
   border-radius: 0.375rem;
@@ -111,7 +111,7 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Simulation Ads Manager chrome — Campaign desk colors (not Meta blue) */
+/* Simulation Ads Manager chrome, Campaign desk colors (not Meta blue) */
 .meta-ads {
   --meta-bg: #f6f3ec;
   --meta-card: #fffdfb;

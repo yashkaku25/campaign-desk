@@ -160,7 +160,7 @@ export function LiveFeed({
           ) : null}
           {hoverPaused ? (
             <span className="rounded-full bg-amber/15 px-2 py-0.5 text-[10px] font-semibold text-amber">
-              Hover paused — read freely
+              Hover paused. Read freely
             </span>
           ) : null}
         </div>
@@ -190,7 +190,7 @@ export function LiveFeed({
       >
         {visible.length === 0 ? (
           <p className="text-[13px] text-muted">
-            Reading mode is on — scroll freely. Hover pauses new bubbles. Tap “Following live” only when you want the feed to stick to the bottom.
+            Reading mode is on. Scroll freely. Hover pauses new bubbles. Tap “Following live” only when you want the feed to stick to the bottom.
           </p>
         ) : null}
         {visible.map((moment) => (

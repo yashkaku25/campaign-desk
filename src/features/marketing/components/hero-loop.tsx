@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 /**
  * Cursor hero job: one wide, dense app window that loops real desk layouts.
- * No marketing eyebrows — titles live in the chrome / panel heads only.
+ * No marketing eyebrows, titles live in the chrome / panel heads only.
  */
 const FRAMES = [
   { id: "desk", title: "Overview", holdMs: 5000 },
@@ -56,7 +56,7 @@ export function HeroLoop() {
             <i />
             <i />
           </span>
-          <span className="hero-loop-chrome-title">Campaign desk — {frame.title}</span>
+          <span className="hero-loop-chrome-title">Campaign desk · {frame.title}</span>
         </div>
         <div className="hero-loop-stage">
           {FRAMES.map((item, itemIndex) => (
@@ -350,7 +350,7 @@ function FrameBody({ id }: { id: FrameId }) {
         </div>
         <div className="hero-preview-card">
           <p className="hero-ui-title">Create · Prospect Feed</p>
-          <p className="hero-ui-note">Quiet hair dryer — cold Feed</p>
+          <p className="hero-ui-note">Quiet hair dryer · cold Feed</p>
           <ul className="hero-preview-list">
             <li>Daily budget 40.00 $</li>
             <li>Audience: cold people · Feed</li>

@@ -1,6 +1,6 @@
 /**
  * Turns desk campaigns and one live simulation into Ads Manager table rows.
- * Pure data — no writes, no Gemini.
+ * Pure data, no writes, no Gemini.
  */
 
 import type { SimMetricStrip } from "@/features/practice/services/sim-metrics";
@@ -99,7 +99,7 @@ export function buildAdsManagerRows(input: BuildAdsRowsInput): AdsManagerRow[] {
       id: adSetId,
       level: "ad_sets",
       parentId: campaignId,
-      name: `${campaign.name} — ad set`,
+      name: `${campaign.name} · ad set`,
       on: campaign.impressions > 0 || campaign.spendCents > 0,
       delivery,
       attribution: "7-day click, 1-day view",
@@ -119,7 +119,7 @@ export function buildAdsManagerRows(input: BuildAdsRowsInput): AdsManagerRow[] {
       id: adId,
       level: "ads",
       parentId: adSetId,
-      name: `${campaign.name} — ad`,
+      name: `${campaign.name} · ad`,
       on: campaign.impressions > 0 || campaign.spendCents > 0,
       delivery,
       attribution: "7-day click, 1-day view",
@@ -193,7 +193,7 @@ function simulationTree(
       id: adSetId,
       level: "ad_sets",
       parentId: campaignId,
-      name: `${seed.name} — ad set`,
+      name: `${seed.name} · ad set`,
       budgetCents: seed.dailyBudgetCents,
       budgetKind: "daily",
     },
@@ -202,7 +202,7 @@ function simulationTree(
       id: adId,
       level: "ads",
       parentId: adSetId,
-      name: `${seed.name} — ad`,
+      name: `${seed.name} · ad`,
       budgetCents: null,
       budgetKind: "none",
     },

@@ -18,7 +18,7 @@ export interface SimulationCreative {
   hasVideo: boolean;
   videoHasWords: boolean;
   product: string;
-  /** Where the click lands — people read this URL. */
+  /** Where the click lands, people read this URL. */
   destinationUrl?: string;
 }
 
@@ -35,7 +35,7 @@ export interface SimulationOffer {
   pageQuality: "fast" | "slow" | "confusing";
   /**
    * Extra human context that changes how people meet the ad.
-   * These are not Meta settings — they are real-life influence.
+   * These are not Meta settings, they are real-life influence.
    */
   device: "phone" | "desktop";
   scrollSpeed: "slow" | "normal" | "fast";
@@ -83,14 +83,14 @@ export interface SimulationSetup {
   offer: SimulationOffer;
   audience: SimulationAudience;
   numbers: SimulationNumbers | null;
-  /** Campaign objective — changes what a “result” means and how people behave. */
+  /** Campaign objective, changes what a “result” means and how people behave. */
   objective?: MetaObjectiveId;
   /** Age, gender, location, interests, behaviors, custom audiences. */
   targeting?: DetailedTargeting;
   /** Where the result happens (website form, Messenger, WhatsApp…). */
   conversionLocation?: ConversionLocationId;
   conversionLocationOther?: string;
-  /** Instant Form question count — longer forms raise abandon risk. */
+  /** Instant Form question count, longer forms raise abandon risk. */
   instantFormQuestionCount?: number;
   callPhoneNumber?: string;
   /** Marketer strategy tag for this run (e.g. feed_only, cut_budget). */

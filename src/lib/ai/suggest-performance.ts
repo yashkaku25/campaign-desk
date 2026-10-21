@@ -2,7 +2,7 @@ import { isStrong, isWeak } from "@/lib/ai/context";
 import type { CampaignAction } from "@/lib/ai/schemas";
 import type { CampaignSummary } from "@/lib/domain";
 
-/** Same ceiling as caps.ts — keep in sync. */
+/** Same ceiling as caps.ts, keep in sync. */
 const MAX_DAILY_BUDGET_CENTS = 10_000_000;
 
 const OPTIMIZE =

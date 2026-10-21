@@ -1,6 +1,6 @@
 /**
  * Meta Instant Form (lead form) structure for Simulation.
- * People fill this on Facebook / Instagram — not on your website.
+ * People fill this on Facebook / Instagram, not on your website.
  */
 
 export type InstantFormFieldId =
@@ -66,7 +66,7 @@ export const DEFAULT_INSTANT_FORM: InstantFormConfig = {
   privacyUrl: "https://yoursite.com/privacy",
   fields: ["full_name", "email", "phone"],
   customQuestions: [],
-  thankYouHeadline: "Thanks — you’re in.",
+  thankYouHeadline: "Thanks, you’re in.",
   thankYouDescription: "We will message you shortly.",
   thankYouCta: "none",
   thankYouUrl: "",

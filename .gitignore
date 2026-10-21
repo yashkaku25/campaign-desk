@@ -5,13 +5,13 @@ out
 *.tsbuildinfo
 .DS_Store
 
-# Local data and tokens — never commit
+# Local data and tokens, never commit
 data/google-refresh.json
 data/local-store.json
 data/local-accounts.json
 data/avatars
 
-# Secrets — never commit (keep .env.example only)
+# Secrets, never commit (keep .env.example only)
 .env
 .env.*
 !.env.example

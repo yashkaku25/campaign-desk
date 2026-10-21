@@ -7,7 +7,7 @@ import { HeroLoop } from "@/features/marketing/components/hero-loop";
 import "@/features/marketing/landing.css";
 
 export const metadata: Metadata = {
-  title: "Campaign desk — See the ad before it spends",
+  title: "Campaign desk: See the ad before it spends",
   description: "Simulate your next campaign, bring in real results from your Google Sheet, and approve every change. A clearer desk for marketer work.",
 };
 

@@ -149,7 +149,7 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
       const set = adSets.find((item) => item.campaignId === id);
       const ad = ads.find((item) => item.campaignId === id);
       setCampaigns((list) => [
-        { ...campaign, id: copyId, name: `${campaign.name} — Copy`, delivery: "scheduled", spendCents: 0, results: 0 },
+        { ...campaign, id: copyId, name: `${campaign.name} · Copy`, delivery: "scheduled", spendCents: 0, results: 0 },
         ...list,
       ]);
       if (set) {
@@ -158,7 +158,7 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
             ...set,
             id: setId,
             campaignId: copyId,
-            name: `${set.name} — Copy`,
+            name: `${set.name} · Copy`,
             spendCents: 0,
             results: 0,
             targeting: { ...set.targeting, interests: [...set.targeting.interests] },
@@ -173,7 +173,7 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
             id: adId,
             campaignId: copyId,
             adSetId: setId,
-            name: `${ad.name} — Copy`,
+            name: `${ad.name} · Copy`,
             spendCents: 0,
             results: 0,
             creatives: ad.creatives.map((creative, index) => ({
@@ -210,7 +210,7 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
                 {
                   id: newId("cr"),
                   label: "B",
-                  headline: `${item.creatives[0]?.headline ?? item.name} — B`,
+                  headline: `${item.creatives[0]?.headline ?? item.name} · B`,
                   primaryText: item.creatives[0]?.primaryText ?? "",
                   description: item.creatives[0]?.description ?? "",
                   hasImage: true,
@@ -421,7 +421,7 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
                         {formatCount(row.results)}
                       </td>
                       <td className="px-3 py-3 text-right tabular-nums text-[var(--meta-ink)]">
-                        {row.costPerResultCents != null ? formatDollars(row.costPerResultCents) : "—"}
+                        {row.costPerResultCents != null ? formatDollars(row.costPerResultCents) : "n/a"}
                       </td>
                       <td className="px-3 py-3 text-right tabular-nums text-[var(--meta-muted)]">
                         {formatDollars(budget)}/day
@@ -439,8 +439,8 @@ export function AdsManager({ seeds }: { seeds: DeskSeed[] }) {
                     {rows.length} {level} in this view
                   </td>
                   <td className="px-3 py-3 text-right tabular-nums">{formatCount(totals.results)}</td>
-                  <td className="px-3 py-3 text-right text-[var(--meta-muted)]">—</td>
-                  <td className="px-3 py-3 text-right text-[var(--meta-muted)]">—</td>
+                  <td className="px-3 py-3 text-right text-[var(--meta-muted)]">n/a</td>
+                  <td className="px-3 py-3 text-right text-[var(--meta-muted)]">n/a</td>
                   <td className="px-3 py-3 text-right tabular-nums">{formatDollars(totals.spend)}</td>
                 </tr>
               </tfoot>
@@ -502,7 +502,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
     <div className="flex min-h-[22rem] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[var(--meta-line)] bg-[var(--meta-card)] px-6 text-center">
       <p className="text-[16px] font-semibold text-[var(--meta-ink)]">No practice ads yet</p>
       <p className="max-w-sm text-[13px] text-[var(--meta-muted)]">
-        Create a campaign, ad set, and ad — then open Delivery week to watch how people research it.
+        Create a campaign, ad set, and ad, then open Delivery week to watch how people research it.
       </p>
       <button type="button" className="meta-btn-primary" onClick={onCreate}>
         Create practice ad

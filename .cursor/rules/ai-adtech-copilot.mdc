@@ -14,10 +14,10 @@ Pragmatic modular monolith under `src/`. No premature microservices.
 - AI (`src/lib/ai/`): Gemini calls, prompt formatting, and JSON parsing.
 
 ```tsx
-// ❌ BAD — query inside a component
+// ❌ BAD: query inside a component
 const { data } = await supabase.from("campaigns").select("*");
 
-// ✅ GOOD — component calls a service
+// ✅ GOOD: component calls a service
 const campaigns = await listCampaigns();
 ```
 
@@ -43,7 +43,7 @@ const action = CampaignActionSchema.parse(JSON.parse(raw));
 // ❌ BAD
 catch (e) {}
 
-// ✅ GOOD — plain words, file, and cause (see plain-english-errors)
+// ✅ GOOD: plain words, file, and cause (see plain-english-errors)
 catch (error) {
   logError({
     what: "Could not create the campaign.",

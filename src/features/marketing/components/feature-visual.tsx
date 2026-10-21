@@ -1,4 +1,4 @@
-/** Dense product windows for zigzag + feature cards — full desk UI, no eyebrows. */
+/** Dense product windows for zigzag + feature cards, full desk UI, no eyebrows. */
 
 export function FeatureVisual({ kind }: { kind: "simulation" | "sheet" | "approve" }) {
   if (kind === "simulation") {
@@ -10,7 +10,7 @@ export function FeatureVisual({ kind }: { kind: "simulation" | "sheet" | "approv
             <i />
             <i />
           </span>
-          <span>Campaign desk — Simulation</span>
+          <span>Campaign desk · Simulation</span>
         </div>
         <div className="feat-desk">
           <aside className="feat-side" aria-hidden="true">
@@ -77,7 +77,7 @@ export function FeatureVisual({ kind }: { kind: "simulation" | "sheet" | "approv
             <i />
             <i />
           </span>
-          <span>Campaign desk — Sheet sync</span>
+          <span>Campaign desk · Sheet sync</span>
         </div>
         <div className="feat-desk">
           <aside className="feat-side" aria-hidden="true">
@@ -152,7 +152,7 @@ export function FeatureVisual({ kind }: { kind: "simulation" | "sheet" | "approv
           <i />
           <i />
         </span>
-        <span>Campaign desk — Chat</span>
+        <span>Campaign desk · Chat</span>
       </div>
       <div className="feat-desk">
         <aside className="feat-side" aria-hidden="true">
@@ -176,7 +176,7 @@ export function FeatureVisual({ kind }: { kind: "simulation" | "sheet" | "approv
           </div>
           <div className="feat-col is-panel">
             <p className="feat-title">Create · Prospect Feed</p>
-            <p className="feat-note">Quiet hair dryer — cold Feed</p>
+            <p className="feat-note">Quiet hair dryer · cold Feed</p>
             <dl className="feat-dl">
               <div>
                 <dt>Budget</dt>

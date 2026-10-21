@@ -1,5 +1,4 @@
 import { DeskFrame } from "@/components/shell/desk-frame";
-import { accessOf } from "@/features/auth/services/access";
 import { requireUser } from "@/features/auth/services/require-user";
 import { listCopilotThread } from "@/features/copilot/services/list-thread";
 
@@ -14,7 +13,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <DeskFrame
       name={user.displayName}
       email={user.email}
-      roleLabel={accessOf(user).role === "admin" ? "Admin" : "Team"}
+      roleLabel={user.email}
       avatarUrl={user.avatarUrl}
       pendingChats={thread.previews.filter((preview) => preview.canApprove).length}
       messages={thread.messages}

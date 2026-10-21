@@ -8,7 +8,7 @@ import { env } from "@/lib/env";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mode?: string }>;
+  searchParams: Promise<{ mode?: string; error?: string }>;
 }) {
   const params = await searchParams;
   const user = await getCurrentUser();
@@ -26,6 +26,11 @@ export default async function LoginPage({
             demoPassword={env.demoPassword}
             showDemo={Boolean(env.demoEmail && env.demoPassword)}
             startMode={params.mode === "sign-up" ? "sign-up" : "sign-in"}
+            startNotice={
+              params.error === "google"
+                ? "Google sign-in did not finish. Use a Gmail account, or sign up with email."
+                : null
+            }
           />
         </div>
       </section>

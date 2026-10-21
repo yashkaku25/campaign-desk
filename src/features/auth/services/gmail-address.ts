@@ -34,8 +34,11 @@ const TEMP_MAIL_DOMAINS = [
   "yopmail.com",
 ] as const;
 
-export const GMAIL_ONLY_MESSAGE = "Use a Gmail address. Temporary email is not accepted.";
-export const TEMP_MAIL_MESSAGE = "Temporary email is not accepted. Use a Gmail address.";
+export const GMAIL_ONLY_MESSAGE = "Use a Gmail or Outlook address. Temporary email is not accepted.";
+export const TEMP_MAIL_MESSAGE = "Temporary email is not accepted. Use a Gmail or Outlook address.";
+
+/** Microsoft mail domains accepted next to gmail.com. Keep in step with handle_new_user in supabase/migrations/0010_private_desks.sql. */
+export const MICROSOFT_DOMAINS = ["outlook.com", "hotmail.com", "live.com", "msn.com"] as const;
 
 export function signupGmail(raw: string): { email: string } | { message: string } {
   const email = raw.trim().toLowerCase();
@@ -43,6 +46,10 @@ export function signupGmail(raw: string): { email: string } | { message: string 
   if (parts.length !== 2 || !parts[0] || !parts[1]) return { message: "Enter a real email address." };
   const [local, domain] = parts;
   if (isTempDomain(domain)) return { message: TEMP_MAIL_MESSAGE };
+  if (isMicrosoftDomain(domain)) {
+    if (!/^[a-z0-9][a-z0-9._+-]{0,63}$/.test(local)) return { message: GMAIL_ONLY_MESSAGE };
+    return { email: `${local}@${domain}` };
+  }
   if (domain !== "gmail.com") return { message: GMAIL_ONLY_MESSAGE };
 
   const plusParts = local.split("+");
@@ -64,6 +71,10 @@ export function signInEmail(raw: string): string {
   const compact = local.replaceAll(".", "");
   if (!compact) return email;
   return `${compact}@gmail.com`;
+}
+
+function isMicrosoftDomain(domain: string): boolean {
+  return (MICROSOFT_DOMAINS as readonly string[]).includes(domain);
 }
 
 function isTempDomain(domain: string): boolean {

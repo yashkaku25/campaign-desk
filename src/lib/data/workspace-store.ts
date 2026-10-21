@@ -67,7 +67,8 @@ async function readSupabaseWorkspace(userId: string): Promise<AppState> {
   const [profileResult, campaignResult, metricResult, threadResult, messageResult, actionResult, auditResult] =
     await Promise.all([
       supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
-      supabase.from("campaigns").select("*").eq("workspace_id", WORKSPACE_ID),
+      // Row security returns only campaigns on this person's own desk.
+      supabase.from("campaigns").select("*"),
       supabase.from("campaign_metrics_daily").select("*"),
       supabase.from("copilot_threads").select("*").eq("user_id", userId),
       supabase.from("copilot_messages").select("*"),
@@ -133,7 +134,7 @@ async function readSupabaseWorkspace(userId: string): Promise<AppState> {
       sheetUrl: sheetResult.error ? null : (sheetResult.data?.sheet_url ?? null),
     },
     profiles: [mapProfile(profile)],
-    campaigns: (campaignResult.data ?? []).map(mapCampaign),
+    campaigns: (campaignResult.data ?? []).filter((row) => row.workspace_id === profile.workspace_id).map(mapCampaign),
     metrics: (metricResult.data ?? []).map(mapMetric),
     threads,
     messages: (messageResult.data ?? []).map(mapMessage).filter((message) => threadIds.has(message.threadId)),

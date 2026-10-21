@@ -14,6 +14,14 @@ describe("signupGmail", () => {
     expect(signupGmail("person@yahoo.com")).toEqual({ message: GMAIL_ONLY_MESSAGE });
   });
 
+  it("accepts Microsoft mail as typed", () => {
+    expect(signupGmail("Some.One@Outlook.com")).toEqual({ email: "some.one@outlook.com" });
+    expect(signupGmail("person_x@hotmail.com")).toEqual({ email: "person_x@hotmail.com" });
+    expect(signupGmail("me@live.com")).toEqual({ email: "me@live.com" });
+    expect(signupGmail("me@msn.com")).toEqual({ email: "me@msn.com" });
+    expect(signupGmail(".me@outlook.com")).toEqual({ message: GMAIL_ONLY_MESSAGE });
+  });
+
   it("rejects a Gmail name that is too short", () => {
     expect(signupGmail("abcde@gmail.com")).toEqual({ message: GMAIL_ONLY_MESSAGE });
   });

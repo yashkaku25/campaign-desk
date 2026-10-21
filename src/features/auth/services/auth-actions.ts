@@ -133,6 +133,47 @@ export async function signUp(
   }
 }
 
+export async function signInWithGoogle(): Promise<AuthNotice> {
+  if (env.dataBackend === "local") {
+    return { ok: false, message: "Google sign-in works on the live desk. Use email here." };
+  }
+  const limited = await limitedNotice("sign-in", "google");
+  if (limited) return limited;
+
+  let target: string | null = null;
+  try {
+    const supabase = await createSupabaseServerClient();
+    const headerList = await headers();
+    const origin = trustedAppOrigin(headerList.get("origin"), env.isProduction);
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${origin}/api/auth/callback` },
+    });
+    if (error || !data.url) {
+      logError({
+        what: "Could not start Google sign-in.",
+        why: "Supabase did not return a Google sign-in link.",
+        file: "src/features/auth/services/auth-actions.ts",
+        connectedTo: "Supabase Auth, Google provider",
+        fix: "Turn on the Google provider in Supabase Auth and add the callback URL.",
+        cause: error ?? undefined,
+      });
+      return { ok: false, message: "Google sign-in is not ready yet. Use email for now." };
+    }
+    target = data.url;
+  } catch (error) {
+    logError({
+      what: "Could not start Google sign-in.",
+      why: "The Google step failed before the redirect.",
+      file: "src/features/auth/services/auth-actions.ts",
+      fix: "Try again.",
+      cause: error,
+    });
+    return { ok: false, message: "Could not start Google sign-in. Try again." };
+  }
+  redirect(target);
+}
+
 export async function signOut(): Promise<void> {
   if (env.dataBackend === "supabase") {
     const supabase = await createSupabaseServerClient();
@@ -173,19 +214,9 @@ async function createLocalAccount(
       fix: "Sign in instead.",
     });
   }
-  const first = saved.profiles.length === 0;
-  const invited = saved.invites.some((invite) => signInEmail(invite.email) === email);
-  if (!first && !invited) {
-    throw new AppError({
-      what: "Ask an admin to invite this email first.",
-      why: "This Gmail is not on the invite list.",
-      file: "src/features/auth/services/auth-actions.ts",
-      fix: "Ask an admin to send an invite, then create the account.",
-    });
-  }
-
+  // Everyone owns their desk now: no invite list and no admin or team split.
   const userId = newRecordId();
-  const role = first ? "admin" : "team";
+  const role = "admin";
   await saveLocalAccount({
     userId,
     email,
@@ -206,10 +237,10 @@ async function createLocalAccount(
           avatarUrl: null,
           role,
           canAsk: true,
-          canPropose: role === "admin",
-          canApprove: role === "admin",
-          canSync: role === "admin",
-          approveCapCents: role === "admin" ? 10_000_000 : 10_000,
+          canPropose: true,
+          canApprove: true,
+          canSync: true,
+          approveCapCents: 10_000_000,
         },
       ],
     },
@@ -247,7 +278,7 @@ function signInMessage(message: string): string {
 function signUpMessage(message: string): string {
   const lower = message.toLowerCase();
   if (lower.includes("already")) return "That email already has an account. Sign in instead.";
-  if (lower.includes("invite")) return "Ask an admin to invite this email first.";
+  if (lower.includes("gmail") || lower.includes("database error")) return "Use a Gmail or Outlook address.";
   if (lower.includes("invalid")) return "Enter a real email address.";
   if (lower.includes("password")) return "Use at least 8 characters in the password.";
   return "Could not create the account. Try again.";

@@ -5,7 +5,7 @@ import { useState } from "react";
 const items = [
   {
     q: "Does Simulation spend real money?",
-    a: "No. Simulation is a practice week. It can be wrong. It does not spend.",
+    a: "No. Simulation explores how your ad might perform. The estimate can be wrong, and no money is spent.",
   },
   {
     q: "Where do the real numbers come from?",
@@ -37,6 +37,8 @@ export function FaqList() {
             <button
               type="button"
               aria-expanded={isOpen}
+              aria-controls={`faq-answer-${index}`}
+              id={`faq-question-${index}`}
               onClick={() => setOpen(isOpen ? null : index)}
             >
               <span>{item.q}</span>
@@ -44,10 +46,11 @@ export function FaqList() {
                 {isOpen ? "−" : "+"}
               </span>
             </button>
-            {isOpen ? <p>{item.a}</p> : null}
+            <div id={`faq-answer-${index}`} role="region" aria-labelledby={`faq-question-${index}`} hidden={!isOpen}><p>{item.a}</p></div>
           </div>
         );
       })}
     </div>
   );
 }
+

@@ -7,10 +7,10 @@ import { useEffect, useState, type ReactNode } from "react";
  * No marketing eyebrows — titles live in the chrome / panel heads only.
  */
 const FRAMES = [
-  { id: "desk", title: "Overview", holdMs: 3200 },
-  { id: "sheet", title: "Sheet sync", holdMs: 3000 },
-  { id: "sim", title: "Simulation", holdMs: 3400 },
-  { id: "approve", title: "Chat", holdMs: 3200 },
+  { id: "desk", title: "Overview", holdMs: 5000 },
+  { id: "sheet", title: "Sheet sync", holdMs: 5000 },
+  { id: "sim", title: "Simulation", holdMs: 5000 },
+  { id: "approve", title: "Chat", holdMs: 5000 },
 ] as const;
 
 type FrameId = (typeof FRAMES)[number]["id"];
@@ -25,6 +25,7 @@ const NAV = [
 
 export function HeroLoop() {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -36,19 +37,18 @@ export function HeroLoop() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || paused) return;
     const hold = FRAMES[index]?.holdMs ?? 3000;
     const timer = window.setTimeout(() => {
       setIndex((current) => (current + 1) % FRAMES.length);
     }, hold);
     return () => window.clearTimeout(timer);
-  }, [index, reduceMotion]);
+  }, [index, reduceMotion, paused]);
 
   const frame = FRAMES[index] ?? FRAMES[0];
 
   return (
-    <div className="hero-loop" aria-label="Product demo. Scenes change on a loop.">
-      <div className="hero-loop-glow" aria-hidden="true" />
+    <div className="hero-loop" id="demo" aria-label="Campaign desk product demo">
       <div className="hero-loop-window">
         <div className="hero-loop-chrome">
           <span className="hero-loop-dots" aria-hidden="true">
@@ -72,14 +72,13 @@ export function HeroLoop() {
           ))}
         </div>
       </div>
-      <div className="hero-loop-progress" aria-hidden="true">
-        {FRAMES.map((item, itemIndex) => (
-          <span
-            key={item.id}
-            className={`hero-loop-bar${itemIndex === index ? " is-active" : ""}${reduceMotion ? " is-static" : ""}`}
-          />
-        ))}
+      <div className="hero-loop-controls">
+        <div className="hero-loop-tabs" role="group" aria-label="Product demo scenes">
+          {FRAMES.map((item, itemIndex) => <button type="button" key={item.id} aria-pressed={itemIndex === index} className={itemIndex === index ? "is-active" : ""} onClick={() => { setIndex(itemIndex); setPaused(true); }}><span>0{itemIndex + 1}</span>{item.title}</button>)}
+        </div>
+        <button className="hero-loop-pause" type="button" aria-pressed={paused || reduceMotion} onClick={() => setPaused(!paused)} disabled={reduceMotion}>{reduceMotion ? "Motion reduced" : paused ? "Play demo ▷" : "Pause demo Ⅱ"}</button>
       </div>
+      <p className="hero-demo-caption">Product demonstration · Example campaign data</p>
     </div>
   );
 }
@@ -128,10 +127,10 @@ function FrameBody({ id }: { id: FrameId }) {
         <header className="hero-panel-head">
           <h3 className="hero-panel-title">Campaigns</h3>
           <div className="hero-metric-row" aria-hidden="true">
-            <MetricChip label="Spend" value="119.00 $" hot />
-            <MetricChip label="Clicks" value="842" />
+            <MetricChip label="Spend" value="169.00 $" hot />
+            <MetricChip label="Clicks" value="1,135" />
             <MetricChip label="CTR" value="1.8 %" />
-            <MetricChip label="Results" value="51" />
+            <MetricChip label="Results" value="64" />
           </div>
         </header>
         <div className="hero-table-wrap">
@@ -384,3 +383,4 @@ function MetricChip({
     </div>
   );
 }
+
